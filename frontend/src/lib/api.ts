@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://medical-billing-software-yc6q.onrender.com/api'
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
