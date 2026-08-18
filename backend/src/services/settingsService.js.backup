@@ -1,0 +1,46 @@
+import prisma from '../config/db.js';
+
+export async function getSettings(businessId) {
+  try {
+    return await prisma.businessSettings.findFirst({
+      where: { businessId },
+      include: { permissions: true }
+    });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function updateSettings(businessId, data) {
+  try {
+    return await prisma.businessSettings.upsert({
+      where: { businessId },
+      create: { ...data, businessId },
+      update: data
+    });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getPermissions(businessId) {
+  try {
+    return await prisma.permission.findMany({
+      where: { businessId },
+      include: { role: true }
+    });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function updatePermissions(businessId, permissions) {
+  try {
+    return await prisma.permission.updateMany({
+      where: { businessId },
+      data: { permissions }
+    });
+  } catch (err) {
+    throw err;
+  }
+}

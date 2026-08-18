@@ -1,0 +1,124 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e36]:
+    - complementary [ref=e37]:
+      - generic [ref=e38]:
+        - link "MyBill" [ref=e40] [cursor=pointer]:
+          - /url: /dashboard
+        - navigation [ref=e48]:
+          - link "Dashboard" [ref=e49] [cursor=pointer]:
+            - /url: /dashboard
+          - link "Products" [ref=e57] [cursor=pointer]:
+            - /url: /products
+          - link "POS" [ref=e64] [cursor=pointer]:
+            - /url: /pos
+          - link "Orders" [ref=e71] [cursor=pointer]:
+            - /url: /orders
+          - link "Purchases" [ref=e77] [cursor=pointer]:
+            - /url: /purchases
+          - link "Customers" [ref=e83] [cursor=pointer]:
+            - /url: /customers
+          - link "Suppliers" [ref=e91] [cursor=pointer]:
+            - /url: /suppliers
+          - link "Inventory" [ref=e99] [cursor=pointer]:
+            - /url: /inventory
+          - link "Invoices" [ref=e105] [cursor=pointer]:
+            - /url: /invoices
+          - link "Payments" [ref=e111] [cursor=pointer]:
+            - /url: /payments
+          - link "Expenses" [ref=e116] [cursor=pointer]:
+            - /url: /expenses
+          - link "Reports" [ref=e122] [cursor=pointer]:
+            - /url: /reports
+          - link "Notifications" [ref=e127] [cursor=pointer]:
+            - /url: /notifications
+          - generic [ref=e133]:
+            - link "Settings" [ref=e134] [cursor=pointer]:
+              - /url: /settings
+            - link "Users" [ref=e140] [cursor=pointer]:
+              - /url: /users
+        - button "Logout" [ref=e157] [cursor=pointer]
+    - generic [ref=e161]:
+      - banner [ref=e162]:
+        - textbox "Search anything..." [ref=e168]
+        - generic [ref=e169]:
+          - button "Toggle theme" [ref=e170] [cursor=pointer]
+          - link [ref=e178] [cursor=pointer]:
+            - /url: /notifications
+            - button [ref=e179]
+          - generic [ref=e183]:
+            - generic [ref=e184]: T
+            - generic [ref=e185]:
+              - paragraph [ref=e186]: Test User
+              - paragraph [ref=e187]: STAFF
+      - main [ref=e188]:
+        - generic [ref=e189]:
+          - generic [ref=e191]:
+            - generic [ref=e192]:
+              - heading "Dashboard" [level=1] [ref=e193]
+              - paragraph [ref=e194]: Welcome back! Here's what's happening with your business.
+            - generic [ref=e195]: 17/08/2026
+          - generic [ref=e201]:
+            - generic [ref=e206]:
+              - paragraph [ref=e207]: Today's Sales
+              - paragraph [ref=e208]: ₹0.00
+              - generic [ref=e209]:
+                - generic [ref=e213]: 12.5%
+                - generic [ref=e214]: vs last month
+            - generic [ref=e222]:
+              - paragraph [ref=e223]: Today's Purchases
+              - paragraph [ref=e224]: ₹0.00
+              - generic [ref=e225]:
+                - generic [ref=e229]: 3.2%
+                - generic [ref=e230]: vs last month
+            - generic [ref=e240]:
+              - paragraph [ref=e241]: Total Orders
+              - paragraph [ref=e242]: "0"
+              - generic [ref=e243]:
+                - generic [ref=e247]: 8.1%
+                - generic [ref=e248]: vs last month
+            - generic [ref=e258]:
+              - paragraph [ref=e259]: Inventory Value
+              - paragraph [ref=e260]: ₹0.00
+              - generic [ref=e261]:
+                - generic [ref=e265]: 5.4%
+                - generic [ref=e266]: vs last month
+            - generic [ref=e274]:
+              - paragraph [ref=e275]: Low Stock Alerts
+              - paragraph [ref=e276]: "0"
+              - generic [ref=e277]:
+                - generic [ref=e281]: 2.1%
+                - generic [ref=e282]: vs last month
+            - generic [ref=e290]:
+              - paragraph [ref=e291]: Today's Profit
+              - paragraph [ref=e292]: ₹0.00
+              - generic [ref=e293]:
+                - generic [ref=e297]: 15.3%
+                - generic [ref=e298]: vs last month
+          - generic [ref=e304]:
+            - generic [ref=e307]:
+              - generic [ref=e308]:
+                - heading "Revenue Analytics" [level=3] [ref=e309]
+                - paragraph [ref=e310]: Monthly revenue overview for the year
+              - generic [ref=e311]: Revenue
+            - generic [ref=e322]:
+              - heading "Top Products" [level=3] [ref=e323]
+              - paragraph [ref=e324]: Best performing products
+          - generic [ref=e332]:
+            - generic [ref=e334]:
+              - generic [ref=e335]:
+                - heading "Recent Transactions" [level=3] [ref=e336]
+                - paragraph [ref=e337]: Latest invoices and payments
+              - generic [ref=e338]: 0 Records
+            - table [ref=e344]:
+              - rowgroup [ref=e345]:
+                - row [ref=e346]:
+                  - columnheader "Invoice" [ref=e347]
+                  - columnheader "Customer" [ref=e348]
+                  - columnheader "Date" [ref=e349]
+                  - columnheader "Amount" [ref=e350]
+                  - columnheader "Status" [ref=e351]
+              - rowgroup [ref=e352]:
+                - row [ref=e353]:
+                  - cell [ref=e354]:
+                    - paragraph [ref=e359]: No transactions found
+  - alert [ref=e35]

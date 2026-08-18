@@ -1,0 +1,103 @@
+import PDFDocument from 'pdfkit'
+import QRCode from 'qrcode'
+
+export async function generateInvoicePDF(invoice, business, format = 'a4') {
+  const doc = new PDFDocument({ size: format === 'a4' ? 'A4' : [80, format === 'thermal' ? 500 : 297] })
+
+  doc.font('Helvetica')
+
+  const b = business || invoice?.business || {}
+  const safeCity = b.city || ''
+  const safeState = b.state || ''
+  const safePincode = b.pincode || ''
+
+  if (b.logo) {
+    try {
+      doc.image(b.logo, 50, 40, { width: 120, height: 60 })
+    } catch {}
+  }
+
+  doc.text(b.name || '', { align: 'center' })
+  doc.text(b.address || '', { align: 'center' })
+  doc.text(`${safeCity}, ${safeState} - ${safePincode}`, { align: 'center' })
+  if (b.gstin) doc.text(`GSTIN: ${b.gstin}`, { align: 'center' })
+
+  doc.moveDown()
+
+  doc.fontSize(16).text('INVOICE', { align: 'center' })
+  doc.fontSize(10)
+  doc.text(`Invoice No: ${invoice.invoiceNumber}`)
+  doc.text(`Date: ${new Date(invoice.invoiceDate).toLocaleDateString('en-IN')}`)
+  if (invoice.dueDate) doc.text(`Due Date: ${new Date(invoice.dueDate).toLocaleDateString('en-IN')}`)
+
+  doc.moveDown()
+  doc.text(`Bill To: ${invoice.customer?.name || ''}`)
+  if (invoice.customer?.phone) doc.text(`Phone: ${invoice.customer.phone}`)
+  if (invoice.customer?.address) doc.text(`Address: ${invoice.customer.address}`)
+  if (invoice.customer?.gstin) doc.text(`GSTIN: ${invoice.customer.gstin}`)
+
+  doc.moveDown()
+
+  const tableTop = doc.y
+  const items = invoice.items || []
+  doc.text('#', 50, tableTop)
+  doc.text('Item', 80, tableTop)
+  doc.text('Qty', 250, tableTop, { width: 50, align: 'right' })
+  doc.text('Price', 310, tableTop, { width: 70, align: 'right' })
+  doc.text('Total', 390, tableTop, { width: 70, align: 'right' })
+
+  doc.moveTo(50, tableTop + 15).lineTo(460, tableTop + 15).stroke()
+
+  let y = tableTop + 25
+  items.forEach((item, idx) => {
+    doc.text(String(idx + 1), 50, y)
+    doc.text(item.product?.name || '', 80, y, { width: 160 })
+    doc.text(String(item.quantity), 250, y, { width: 50, align: 'right' })
+    doc.text(String(item.unitPrice), 310, y, { width: 70, align: 'right' })
+    doc.text(String(item.totalAmount), 390, y, { width: 70, align: 'right' })
+    y += 20
+  })
+
+  doc.moveTo(50, y).lineTo(460, y).stroke()
+  y += 10
+
+  doc.text(`Subtotal: ${invoice.subTotal}`, { align: 'right' })
+  doc.text(`CGST: ${invoice.cgstAmount}`, { align: 'right' })
+  doc.text(`SGST: ${invoice.sgstAmount}`, { align: 'right' })
+  doc.text(`IGST: ${invoice.igstAmount}`, { align: 'right' })
+  if (invoice.discountAmount > 0) doc.text(`Discount: ${invoice.discountAmount}`, { align: 'right' })
+  doc.font('Helvetica-Bold').text(`Total: ${invoice.totalAmount}`, { align: 'right' })
+  doc.font('Helvetica')
+  doc.text(`Paid: ${invoice.paidAmount}`, { align: 'right' })
+  doc.text(`Balance: ${invoice.balanceAmount}`, { align: 'right' })
+
+  y += 30
+
+  if (invoice.termsConditions) {
+    doc.text('Terms & Conditions:', 50, y)
+    doc.text(invoice.termsConditions, 50, y + 15, { width: 410 })
+  }
+
+  y += 60
+  if (b.upiId) {
+    try {
+      const qr = await QRCode.toDataURL(`upi://pay?pa=${b.upiId}&am=${invoice.totalAmount}&cu=INR`)
+      doc.image(qr, 50, y, { width: 80, height: 80 })
+    } catch {}
+  }
+
+  doc.text('Thank you for your business!', { align: 'center' })
+
+  const chunks = []
+  return new Promise((resolve, reject) => {
+    doc.on('data', (chunk) => chunks.push(chunk))
+    doc.on('end', () => {
+      const pdfBuffer = Buffer.concat(chunks)
+      resolve({ pdfBuffer, invoice })
+    })
+    doc.on('error', reject)
+    doc.end()
+  })
+}
+
+export default { generateInvoicePDF }

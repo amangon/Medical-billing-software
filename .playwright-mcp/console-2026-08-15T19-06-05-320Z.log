@@ -1,0 +1,210 @@
+[     365ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom.development.js:38559
+[     461ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3001/favicon.ico:0
+[    1083ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:3001/login:0
+[    1298ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom.development.js:38559
+[   27415ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[   27897ms] [ERROR] ./src/app/globals.css:48:5
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive.
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary { @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[   27897ms] [ERROR] ./src/app/globals.css
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive. (48:5)
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary {
+-- inner error --
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive. (48:5)
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary {
+Generated code for /Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!/Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!/Users/amanlala/Desktop/mybill/frontend/src/app/globals.css
+
+Import trace for requested module:
+./src/app/globals.css @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[   28781ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[   29224ms] [ERROR] ./src/app/globals.css:48:5
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive.
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary { @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[   29225ms] [ERROR] ./src/app/globals.css
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive. (48:5)
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary {
+-- inner error --
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive. (48:5)
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary {
+Generated code for /Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!/Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!/Users/amanlala/Desktop/mybill/frontend/src/app/globals.css
+
+Import trace for requested module:
+./src/app/globals.css @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/app-index.js:32
+[   29729ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3001/login?_rsc=1c5gs:0
+[   29794ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3001/login?_rsc=1c5gs:0
+[   29879ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3001/login?_rsc=1c5gs:0
+[   30040ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3001/login:0
+[   30651ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ webpack-internal:///./node_modules/react-dom/cjs/react-dom.development.js:29889
+[   30712ms] Error: Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive.
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary {
+
+    at getCssError (file:///Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/parseCss.js:24:16)
+    at getModuleBuildError (file:///Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/webpackModuleError.js:116:43)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async (file:///Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/index.js:29:49)
+    at async (file:///Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/plugins/wellknown-errors-plugin/index.js:27:21)
+[   30691ms] [LOG] [HMR] connected @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/pages/websocket.js:38
+[   30693ms] [ERROR] ./src/app/globals.css:48:5
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive.
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary { @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[   30694ms] [ERROR] ./src/app/globals.css
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive. (48:5)
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary {
+-- inner error --
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive. (48:5)
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary {
+Generated code for /Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!/Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!/Users/amanlala/Desktop/mybill/frontend/src/app/globals.css @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[   30774ms] [ERROR] ./src/app/globals.css:48:5
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive.
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary { @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[   30774ms] [ERROR] ./src/app/globals.css
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive. (48:5)
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary {
+-- inner error --
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive. (48:5)
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary {
+Generated code for /Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!/Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!/Users/amanlala/Desktop/mybill/frontend/src/app/globals.css @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[   36406ms] [ERROR] ./src/app/globals.css:48:5
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive.
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary { @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[   36406ms] [ERROR] ./src/app/globals.css
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive. (48:5)
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary {
+-- inner error --
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive. (48:5)
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary {
+Generated code for /Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!/Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!/Users/amanlala/Desktop/mybill/frontend/src/app/globals.css @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[   37234ms] [ERROR] ./src/app/globals.css:48:5
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive.
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary { @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[   37235ms] [ERROR] ./src/app/globals.css
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive. (48:5)
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary {
+-- inner error --
+Syntax error: /Users/amanlala/Desktop/mybill/frontend/src/app/globals.css The `hover:shadow-card-hover` class does not exist. If `hover:shadow-card-hover` is a custom class, make sure it is defined within a `@layer` directive. (48:5)
+
+  46 | @layer components {
+  47 |   .card-hover {
+> 48 |     @apply transition-all duration-300 hover:shadow-card-hover hover:-translate-y-1;
+     |     ^
+  49 |   }
+  50 |   .btn-primary {
+Generated code for /Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[2]!/Users/amanlala/Desktop/mybill/frontend/node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[14].oneOf[12].use[3]!/Users/amanlala/Desktop/mybill/frontend/src/app/globals.css @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/internal/helpers/hydration-error-info.js:62
+[   61220ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/pages/hot-reloader-client.js:221
+[   61986ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/pages/hot-reloader-client.js:221
+[   62706ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3001/_next/static/webpack/9acc4337626c4586.webpack.hot-update.json:0
+[   62706ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ webpack-internal:///./node_modules/next/dist/client/components/react-dev-overlay/pages/hot-reloader-client.js:349
+[   62817ms] [VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:3001/login:0
+[   63100ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom.development.js:38559
+[   71437ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[   71787ms] [LOG] [Fast Refresh] done in 350ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
+[   80231ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[   80546ms] [LOG] [Fast Refresh] done in 314ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43

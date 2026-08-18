@@ -1,0 +1,65 @@
+- generic [active] [ref=f4e1]:
+  - generic [ref=f4e2]:
+    - complementary [ref=f4e3]:
+      - generic [ref=f4e4]:
+        - link "MyBill" [ref=f4e6] [cursor=pointer]:
+          - /url: /dashboard
+        - navigation [ref=f4e14]:
+          - link "Dashboard" [ref=f4e15] [cursor=pointer]:
+            - /url: /dashboard
+          - link "Products" [ref=f4e23] [cursor=pointer]:
+            - /url: /products
+          - link "POS" [ref=f4e30] [cursor=pointer]:
+            - /url: /pos
+          - link "Orders" [ref=f4e37] [cursor=pointer]:
+            - /url: /orders
+          - link "Purchases" [ref=f4e43] [cursor=pointer]:
+            - /url: /purchases
+          - link "Customers" [ref=f4e49] [cursor=pointer]:
+            - /url: /customers
+          - link "Suppliers" [ref=f4e57] [cursor=pointer]:
+            - /url: /suppliers
+          - link "Inventory" [ref=f4e65] [cursor=pointer]:
+            - /url: /inventory
+          - link "Invoices" [ref=f4e71] [cursor=pointer]:
+            - /url: /invoices
+          - link "Payments" [ref=f4e77] [cursor=pointer]:
+            - /url: /payments
+          - link "Expenses" [ref=f4e82] [cursor=pointer]:
+            - /url: /expenses
+          - link "Reports" [ref=f4e88] [cursor=pointer]:
+            - /url: /reports
+          - link "Notifications" [ref=f4e93] [cursor=pointer]:
+            - /url: /notifications
+          - generic [ref=f4e99]:
+            - link "Settings" [ref=f4e100] [cursor=pointer]:
+              - /url: /settings
+            - link "Users" [ref=f4e106] [cursor=pointer]:
+              - /url: /users
+        - button "Logout" [ref=f4e123] [cursor=pointer]
+    - generic [ref=f4e127]:
+      - banner [ref=f4e128]:
+        - textbox "Search anything..." [ref=f4e134]
+        - generic [ref=f4e135]:
+          - button "Toggle theme" [ref=f4e136] [cursor=pointer]
+          - link [ref=f4e144] [cursor=pointer]:
+            - /url: /notifications
+            - button [ref=f4e145]
+          - generic [ref=f4e149]:
+            - generic [ref=f4e150]: T
+            - generic [ref=f4e151]:
+              - paragraph [ref=f4e152]: Test User
+              - paragraph [ref=f4e153]: STAFF
+      - main [ref=f4e154]:
+        - generic [ref=f4e155]:
+          - generic [ref=f4e156]:
+            - generic [ref=f4e157]:
+              - heading "Customers" [level=1] [ref=f4e158]
+              - paragraph [ref=f4e159]: Manage your customers
+            - link [ref=f4e160] [cursor=pointer]:
+              - /url: /customers/new
+              - button "Add Customer" [ref=f4e161]
+          - generic [ref=f4e163]:
+            - textbox "Search customers..." [ref=f4e170]
+            - generic [ref=f4e171]: Loading customers...
+  - alert [ref=f4e173]

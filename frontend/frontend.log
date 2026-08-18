@@ -1,0 +1,69 @@
+
+> mybill-frontend@1.0.0 dev
+> next dev
+
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3000
+
+ ✓ Starting...
+ ✓ Ready in 1823ms
+ ○ Compiling /invoices/[id]/edit ...
+ ⨯ ./src/app/(dashboard)/invoices/[id]/edit/page.tsx
+Error: 
+  [31mx[0m Unexpected token `motion`. Expected jsx identifier
+     ,-[[36;1;4m/Users/amanlala/Desktop/mybill/frontend/src/app/(dashboard)/invoices/[id]/edit/page.tsx[0m:280:1]
+ [2m280[0m |   }
+ [2m281[0m |   
+ [2m282[0m |   return (
+ [2m283[0m |     <motion.form
+     : [31;1m     ^^^^^^[0m
+ [2m284[0m |       onSubmit={handleSubmit(onSubmit)}
+ [2m285[0m |       initial="hidden"
+ [2m286[0m |       animate="visible"
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/(dashboard)/invoices/[id]/edit/page.tsx
+ ⨯ ./src/app/(dashboard)/invoices/[id]/edit/page.tsx
+Error: 
+  [31mx[0m Unexpected token `motion`. Expected jsx identifier
+     ,-[[36;1;4m/Users/amanlala/Desktop/mybill/frontend/src/app/(dashboard)/invoices/[id]/edit/page.tsx[0m:280:1]
+ [2m280[0m |   }
+ [2m281[0m |   
+ [2m282[0m |   return (
+ [2m283[0m |     <motion.form
+     : [31;1m     ^^^^^^[0m
+ [2m284[0m |       onSubmit={handleSubmit(onSubmit)}
+ [2m285[0m |       initial="hidden"
+ [2m286[0m |       animate="visible"
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/(dashboard)/invoices/[id]/edit/page.tsx
+ ⨯ ./src/app/(dashboard)/invoices/[id]/edit/page.tsx
+Error: 
+  [31mx[0m Unexpected token `motion`. Expected jsx identifier
+     ,-[[36;1;4m/Users/amanlala/Desktop/mybill/frontend/src/app/(dashboard)/invoices/[id]/edit/page.tsx[0m:280:1]
+ [2m280[0m |   }
+ [2m281[0m |   
+ [2m282[0m |   return (
+ [2m283[0m |     <motion.form
+     : [31;1m     ^^^^^^[0m
+ [2m284[0m |       onSubmit={handleSubmit(onSubmit)}
+ [2m285[0m |       initial="hidden"
+ [2m286[0m |       animate="visible"
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./src/app/(dashboard)/invoices/[id]/edit/page.tsx
+ GET /invoices/cmsvqy59f000171zyn5mqjilf/edit 500 in 2064ms
+[?25h

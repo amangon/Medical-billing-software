@@ -1,0 +1,196 @@
+
+> mybill-backend@1.0.0 dev
+> nodemon src/server.js
+
+[33m[nodemon] 3.1.14[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching path(s): *.*[39m
+[33m[nodemon] watching extensions: js,mjs,cjs,json[39m
+[32m[nodemon] starting `node src/server.js`[39m
+Server running on port 5001
+PrismaClientValidationError: 
+Invalid `prisma.product.findMany()` invocation:
+
+{
+  where: {
+    businessId: "cmsvgnb9b0001ufumogv5ifex"
+  },
+  include: {
+    category: true,
+    brand: true,
+    tax: true,
+    ~~~
+?   business?: true,
+?   category?: true,
+?   brand?: true,
+?   unit?: true,
+?   batches?: true,
+?   orderItems?: true,
+?   purchaseItems?: true,
+?   invoiceItems?: true,
+?   stockMovements?: true
+  },
+  orderBy: {
+    quantity: "asc"
+  }
+}
+
+Invalid scalar field `tax` for include statement on model Product. Available options are marked with ?.
+Note that include statements only accept relation fields.
+    at wn (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:1363)
+    at e.throwValidationError (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:10206)
+    at rd (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6772)
+    at td (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6525)
+    at ed (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6411)
+    at mr (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6055)
+    at vn (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:5902)
+    at /Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:130:10186
+    at Object.runInChildSpan (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:121:1509)
+    at t._executeRequest (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:130:10165)
+PrismaClientValidationError: 
+Invalid `prisma.product.findMany()` invocation:
+
+{
+  where: {
+    businessId: "cmsvgnb9b0001ufumogv5ifex"
+  },
+  include: {
+    category: true,
+    brand: true,
+    tax: true,
+    ~~~
+?   business?: true,
+?   category?: true,
+?   brand?: true,
+?   unit?: true,
+?   batches?: true,
+?   orderItems?: true,
+?   purchaseItems?: true,
+?   invoiceItems?: true,
+?   stockMovements?: true
+  },
+  orderBy: {
+    quantity: "asc"
+  }
+}
+
+Invalid scalar field `tax` for include statement on model Product. Available options are marked with ?.
+Note that include statements only accept relation fields.
+    at wn (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:1363)
+    at e.throwValidationError (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:10206)
+    at rd (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6772)
+    at td (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6525)
+    at ed (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6411)
+    at mr (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6055)
+    at vn (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:5902)
+    at /Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:130:10186
+    at Object.runInChildSpan (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:121:1509)
+    at t._executeRequest (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:130:10165)
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/server.js`[39m
+Server running on port 5001
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/server.js`[39m
+Server running on port 5001
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/server.js`[39m
+Server running on port 5001
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/server.js`[39m
+Server running on port 5001
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node src/server.js`[39m
+Server running on port 5001
+PrismaClientValidationError: 
+Invalid `prisma.expense.findMany()` invocation:
+
+{
+  where: {
+    businessId: "cmsvgnb9b0001ufumogv5ifex"
+  },
+  include: {
+    category: true,
+    ~~~~~~~~
+?   business?: true
+  },
+  skip: 0,
+  take: 20,
+  orderBy: {
+    date: "desc"
+  }
+}
+
+Invalid scalar field `category` for include statement on model Expense. Available options are marked with ?.
+Note that include statements only accept relation fields.
+    at wn (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:1363)
+    at e.throwValidationError (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:10206)
+    at rd (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6772)
+    at td (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6525)
+    at ed (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6411)
+    at mr (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6055)
+    at vn (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:5902)
+    at /Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:130:10186
+    at Object.runInChildSpan (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:121:1509)
+    at t._executeRequest (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:130:10165)
+PrismaClientValidationError: 
+Invalid `prisma.expense.findMany()` invocation:
+
+{
+  where: {
+    businessId: "cmsvgnb9b0001ufumogv5ifex"
+  },
+  include: {
+    category: true,
+    ~~~~~~~~
+?   business?: true
+  },
+  skip: 0,
+  take: 20,
+  orderBy: {
+    date: "desc"
+  }
+}
+
+Invalid scalar field `category` for include statement on model Expense. Available options are marked with ?.
+Note that include statements only accept relation fields.
+    at wn (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:1363)
+    at e.throwValidationError (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:10206)
+    at rd (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6772)
+    at td (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6525)
+    at ed (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6411)
+    at mr (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6055)
+    at vn (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:5902)
+    at /Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:130:10186
+    at Object.runInChildSpan (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:121:1509)
+    at t._executeRequest (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:130:10165)
+PrismaClientValidationError: 
+Invalid `prisma.expense.findMany()` invocation:
+
+{
+  where: {
+    businessId: "cmsvgnb9b0001ufumogv5ifex"
+  },
+  include: {
+    category: true,
+    ~~~~~~~~
+?   business?: true
+  },
+  skip: 0,
+  take: 20,
+  orderBy: {
+    date: "desc"
+  }
+}
+
+Invalid scalar field `category` for include statement on model Expense. Available options are marked with ?.
+Note that include statements only accept relation fields.
+    at wn (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:1363)
+    at e.throwValidationError (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:10206)
+    at rd (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6772)
+    at td (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6525)
+    at ed (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6411)
+    at mr (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:6055)
+    at vn (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:29:5902)
+    at /Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:130:10186
+    at Object.runInChildSpan (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:121:1509)
+    at t._executeRequest (/Users/amanlala/Desktop/mybill/backend/node_modules/@prisma/client/runtime/library.js:130:10165)
