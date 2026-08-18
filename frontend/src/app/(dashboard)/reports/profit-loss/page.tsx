@@ -48,12 +48,12 @@ export default function ProfitLossPage() {
         <CardContent>
           <div className="flex gap-4 items-end">
             <div className="space-y-2">
-              <Label>Start Date</Label>
-              <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+              <Label htmlFor="pl-start-date">Start Date</Label>
+              <Input id="pl-start-date" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
             </div>
             <div className="space-y-2">
-              <Label>End Date</Label>
-              <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+              <Label htmlFor="pl-end-date">End Date</Label>
+              <Input id="pl-end-date" type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
             </div>
             <Button onClick={handleGenerate} disabled={loading}>
               {loading ? 'Generating...' : 'Generate Report'}

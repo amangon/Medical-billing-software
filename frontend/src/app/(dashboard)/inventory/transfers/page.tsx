@@ -57,8 +57,9 @@ export default function InventoryTransfersPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Product ID</Label>
+                <Label htmlFor="transfer-product-id">Product ID</Label>
                 <Input
+                  id="transfer-product-id"
                   value={formData.productId}
                   onChange={(e) => setFormData({ ...formData, productId: e.target.value })}
                   required
@@ -66,8 +67,9 @@ export default function InventoryTransfersPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label>Quantity</Label>
+                <Label htmlFor="transfer-quantity">Quantity</Label>
                 <Input
+                  id="transfer-quantity"
                   type="number"
                   value={formData.quantity}
                   onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) || 0 })}
@@ -76,8 +78,9 @@ export default function InventoryTransfersPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label>From Location</Label>
+                <Label htmlFor="transfer-from">From Location</Label>
                 <Input
+                  id="transfer-from"
                   value={formData.fromLocation}
                   onChange={(e) => setFormData({ ...formData, fromLocation: e.target.value })}
                   required
@@ -85,8 +88,9 @@ export default function InventoryTransfersPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label>To Location</Label>
+                <Label htmlFor="transfer-to">To Location</Label>
                 <Input
+                  id="transfer-to"
                   value={formData.toLocation}
                   onChange={(e) => setFormData({ ...formData, toLocation: e.target.value })}
                   required
@@ -94,8 +98,9 @@ export default function InventoryTransfersPage() {
                 />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <Label>Notes</Label>
+                <Label htmlFor="transfer-notes">Notes</Label>
                 <Input
+                  id="transfer-notes"
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   className="rounded-[24px]"

@@ -86,16 +86,16 @@ export default function CategoriesPage() {
             </DialogHeader>
             <form onSubmit={handleCreate} className="space-y-4">
               <div className="space-y-2">
-                <Label>Name</Label>
-                <Input value={name} onChange={(e) => setName(e.target.value)} required />
+                <Label htmlFor="category-name">Name</Label>
+                <Input id="category-name" value={name} onChange={(e) => setName(e.target.value)} required />
               </div>
               <div className="space-y-2">
-                <Label>Description</Label>
-                <Input value={description} onChange={(e) => setDescription(e.target.value)} />
+                <Label htmlFor="category-description">Description</Label>
+                <Input id="category-description" value={description} onChange={(e) => setDescription(e.target.value)} />
               </div>
               <div className="space-y-2">
-                <Label>Color</Label>
-                <Input type="color" value={color} onChange={(e) => setColor(e.target.value)} />
+                <Label htmlFor="category-color">Color</Label>
+                <Input id="category-color" type="color" value={color} onChange={(e) => setColor(e.target.value)} />
               </div>
               <Button type="submit" className="w-full">Create</Button>
             </form>

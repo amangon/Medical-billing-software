@@ -30,20 +30,20 @@ export default function ProfilePage() {
           <form onSubmit={handleUpdate} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Name</Label>
-                <Input defaultValue={user?.name || ''} />
+                <Label htmlFor="profile-name">Name</Label>
+                <Input id="profile-name" defaultValue={user?.name || ''} />
               </div>
               <div className="space-y-2">
-                <Label>Email</Label>
-                <Input defaultValue={user?.email || ''} disabled />
+                <Label htmlFor="profile-email">Email</Label>
+                <Input id="profile-email" defaultValue={user?.email || ''} disabled />
               </div>
               <div className="space-y-2">
-                <Label>Phone</Label>
-                <Input defaultValue={user?.phone || ''} />
+                <Label htmlFor="profile-phone">Phone</Label>
+                <Input id="profile-phone" defaultValue={user?.phone || ''} />
               </div>
               <div className="space-y-2">
-                <Label>Role</Label>
-                <Input value={user?.role || ''} disabled />
+                <Label htmlFor="profile-role">Role</Label>
+                <Input id="profile-role" value={user?.role || ''} disabled />
               </div>
             </div>
             <div className="flex justify-end gap-2">

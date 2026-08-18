@@ -134,6 +134,21 @@
     @apply transition-all duration-200;
   }
 
+  input,
+  textarea,
+  select {
+    color: #111827 !important;
+    background: #ffffff !important;
+    caret-color: #111827 !important;
+    opacity: 1 !important;
+    border: 1px solid #d1d5db !important;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #6b7280 !important;
+  }
+
   .focus-premium:focus {
     @apply outline-none ring-2 ring-primary/20 ring-offset-2 ring-offset-background;
   }

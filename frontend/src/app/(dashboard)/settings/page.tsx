@@ -221,40 +221,40 @@ export default function SettingsPage() {
               <form onSubmit={handleSave} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Business Name *</Label>
-                    <Input value={business.name} onChange={(e) => setBusiness({ ...business, name: e.target.value })} required />
+                    <Label htmlFor="business-name">Business Name *</Label>
+                    <Input id="business-name" value={business.name} onChange={(e) => setBusiness({ ...business, name: e.target.value })} required />
                   </div>
                   <div className="space-y-2">
-                    <Label>Email *</Label>
-                    <Input type="email" value={business.email} onChange={(e) => setBusiness({ ...business, email: e.target.value })} required />
+                    <Label htmlFor="business-email">Email *</Label>
+                    <Input id="business-email" type="email" value={business.email} onChange={(e) => setBusiness({ ...business, email: e.target.value })} required />
                   </div>
                   <div className="space-y-2">
-                    <Label>Phone *</Label>
-                    <Input value={business.phone} onChange={(e) => setBusiness({ ...business, phone: e.target.value })} required />
+                    <Label htmlFor="business-phone">Phone *</Label>
+                    <Input id="business-phone" value={business.phone} onChange={(e) => setBusiness({ ...business, phone: e.target.value })} required />
                   </div>
                   <div className="space-y-2">
-                    <Label>GSTIN</Label>
-                    <Input value={business.gstin} onChange={(e) => setBusiness({ ...business, gstin: e.target.value.toUpperCase() })} placeholder="27AABCU9603R1ZX" />
+                    <Label htmlFor="business-gstin">GSTIN</Label>
+                    <Input id="business-gstin" value={business.gstin} onChange={(e) => setBusiness({ ...business, gstin: e.target.value.toUpperCase() })} placeholder="27AABCU9603R1ZX" />
                   </div>
                   <div className="space-y-2">
-                    <Label>PAN</Label>
-                    <Input value={business.pan} onChange={(e) => setBusiness({ ...business, pan: e.target.value.toUpperCase() })} placeholder="AABCU9603R" />
+                    <Label htmlFor="business-pan">PAN</Label>
+                    <Input id="business-pan" value={business.pan} onChange={(e) => setBusiness({ ...business, pan: e.target.value.toUpperCase() })} placeholder="AABCU9603R" />
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label>Address</Label>
-                    <Input value={business.address} onChange={(e) => setBusiness({ ...business, address: e.target.value })} />
+                    <Label htmlFor="business-address">Address</Label>
+                    <Input id="business-address" value={business.address} onChange={(e) => setBusiness({ ...business, address: e.target.value })} />
                   </div>
                   <div className="space-y-2">
-                    <Label>City</Label>
-                    <Input value={business.city} onChange={(e) => setBusiness({ ...business, city: e.target.value })} />
+                    <Label htmlFor="business-city">City</Label>
+                    <Input id="business-city" value={business.city} onChange={(e) => setBusiness({ ...business, city: e.target.value })} />
                   </div>
                   <div className="space-y-2">
-                    <Label>State</Label>
-                    <Input value={business.state} onChange={(e) => setBusiness({ ...business, state: e.target.value })} />
+                    <Label htmlFor="business-state">State</Label>
+                    <Input id="business-state" value={business.state} onChange={(e) => setBusiness({ ...business, state: e.target.value })} />
                   </div>
                   <div className="space-y-2">
-                    <Label>PIN Code</Label>
-                    <Input value={business.pincode} onChange={(e) => setBusiness({ ...business, pincode: e.target.value })} />
+                    <Label htmlFor="business-pincode">PIN Code</Label>
+                    <Input id="business-pincode" value={business.pincode} onChange={(e) => setBusiness({ ...business, pincode: e.target.value })} />
                   </div>
                 </div>
 
@@ -361,29 +361,30 @@ export default function SettingsPage() {
               <form onSubmit={handleSave} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Invoice Prefix</Label>
-                    <Input value={business.invoicePrefix} onChange={(e) => setBusiness({ ...business, invoicePrefix: e.target.value })} />
+                    <Label htmlFor="invoice-prefix">Invoice Prefix</Label>
+                    <Input id="invoice-prefix" value={business.invoicePrefix} onChange={(e) => setBusiness({ ...business, invoicePrefix: e.target.value })} />
                   </div>
                   <div className="space-y-2">
-                    <Label>Currency</Label>
-                    <Input value={business.currency} onChange={(e) => setBusiness({ ...business, currency: e.target.value })} />
+                    <Label htmlFor="currency">Currency</Label>
+                    <Input id="currency" value={business.currency} onChange={(e) => setBusiness({ ...business, currency: e.target.value })} />
                   </div>
                   <div className="space-y-2">
-                    <Label>CGST Rate (%)</Label>
-                    <Input type="number" value={business.cgstRate} onChange={(e) => setBusiness({ ...business, cgstRate: Number(e.target.value) })} />
+                    <Label htmlFor="cgst-rate">CGST Rate (%)</Label>
+                    <Input id="cgst-rate" type="number" value={business.cgstRate} onChange={(e) => setBusiness({ ...business, cgstRate: Number(e.target.value) })} />
                   </div>
                   <div className="space-y-2">
-                    <Label>SGST Rate (%)</Label>
-                    <Input type="number" value={business.sgstRate} onChange={(e) => setBusiness({ ...business, sgstRate: Number(e.target.value) })} />
+                    <Label htmlFor="sgst-rate">SGST Rate (%)</Label>
+                    <Input id="sgst-rate" type="number" value={business.sgstRate} onChange={(e) => setBusiness({ ...business, sgstRate: Number(e.target.value) })} />
                   </div>
                   <div className="space-y-2">
-                    <Label>IGST Rate (%)</Label>
-                    <Input type="number" value={business.igstRate} onChange={(e) => setBusiness({ ...business, igstRate: Number(e.target.value) })} />
+                    <Label htmlFor="igst-rate">IGST Rate (%)</Label>
+                    <Input id="igst-rate" type="number" value={business.igstRate} onChange={(e) => setBusiness({ ...business, igstRate: Number(e.target.value) })} />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label>Terms & Conditions</Label>
+                  <Label htmlFor="terms-conditions">Terms & Conditions</Label>
                   <Textarea
+                    id="terms-conditions"
                     value={business.termsConditions}
                     onChange={(e) => setBusiness({ ...business, termsConditions: e.target.value })}
                     placeholder="Enter standard terms and conditions for invoices"
@@ -410,24 +411,24 @@ export default function SettingsPage() {
               <form onSubmit={handleSave} className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>UPI ID</Label>
-                    <Input value={business.upiId} onChange={(e) => setBusiness({ ...business, upiId: e.target.value })} placeholder="example@upi" />
+                    <Label htmlFor="upi-id">UPI ID</Label>
+                    <Input id="upi-id" value={business.upiId} onChange={(e) => setBusiness({ ...business, upiId: e.target.value })} placeholder="example@upi" />
                   </div>
                   <div className="space-y-2">
-                    <Label>Account Holder Name</Label>
-                    <Input value={business.accountHolderName} onChange={(e) => setBusiness({ ...business, accountHolderName: e.target.value })} />
+                    <Label htmlFor="account-holder-name">Account Holder Name</Label>
+                    <Input id="account-holder-name" value={business.accountHolderName} onChange={(e) => setBusiness({ ...business, accountHolderName: e.target.value })} />
                   </div>
                   <div className="space-y-2">
-                    <Label>Bank Name</Label>
-                    <Input value={business.bankName} onChange={(e) => setBusiness({ ...business, bankName: e.target.value })} />
+                    <Label htmlFor="bank-name">Bank Name</Label>
+                    <Input id="bank-name" value={business.bankName} onChange={(e) => setBusiness({ ...business, bankName: e.target.value })} />
                   </div>
                   <div className="space-y-2">
-                    <Label>Account Number</Label>
-                    <Input value={business.accountNumber} onChange={(e) => setBusiness({ ...business, accountNumber: e.target.value })} />
+                    <Label htmlFor="account-number">Account Number</Label>
+                    <Input id="account-number" value={business.accountNumber} onChange={(e) => setBusiness({ ...business, accountNumber: e.target.value })} />
                   </div>
                   <div className="space-y-2">
-                    <Label>IFSC Code</Label>
-                    <Input value={business.ifscCode} onChange={(e) => setBusiness({ ...business, ifscCode: e.target.value.toUpperCase() })} placeholder="SBIN0001234" />
+                    <Label htmlFor="ifsc-code">IFSC Code</Label>
+                    <Input id="ifsc-code" value={business.ifscCode} onChange={(e) => setBusiness({ ...business, ifscCode: e.target.value.toUpperCase() })} placeholder="SBIN0001234" />
                   </div>
                 </div>
                 <div className="flex justify-end">

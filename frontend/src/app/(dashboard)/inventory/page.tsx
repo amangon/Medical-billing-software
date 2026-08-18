@@ -101,25 +101,25 @@ export default function InventoryPage() {
               </DialogHeader>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="space-y-2">
-                  <Label>Product</Label>
-                  <Input {...register('productId')} placeholder="Product ID" className="rounded-[24px]" />
+                  <Label htmlFor="inventory-product">Product</Label>
+                  <Input id="inventory-product" {...register('productId')} placeholder="Product ID" className="rounded-[24px]" />
                   {errors.productId && <p className="text-sm text-destructive">{errors.productId.message}</p>}
                 </div>
                 <div className="space-y-2">
-                  <Label>Type</Label>
-                  <select {...register('type')} className="w-full p-2 border border-border rounded-[24px] bg-white">
+                  <Label htmlFor="inventory-type">Type</Label>
+                  <select id="inventory-type" {...register('type')} className="w-full p-2 border border-border rounded-[24px] bg-white">
                     <option value="ADD">Add</option>
                     <option value="REMOVE">Remove</option>
                     <option value="SET">Set</option>
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Quantity</Label>
-                  <Input type="number" {...register('quantity')} className="rounded-[24px]" />
+                  <Label htmlFor="inventory-quantity">Quantity</Label>
+                  <Input id="inventory-quantity" type="number" {...register('quantity')} className="rounded-[24px]" />
                 </div>
                 <div className="space-y-2">
-                  <Label>Reason</Label>
-                  <Input {...register('reason')} className="rounded-[24px]" />
+                  <Label htmlFor="inventory-reason">Reason</Label>
+                  <Input id="inventory-reason" {...register('reason')} className="rounded-[24px]" />
                   {errors.reason && <p className="text-sm text-destructive">{errors.reason.message}</p>}
                 </div>
                 <Button type="submit" disabled={isSubmitting} className="w-full rounded-[24px]">

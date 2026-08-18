@@ -496,7 +496,7 @@ export default function NewInvoicePage() {
             {/* Customer selector (only when not walk-in) */}
             {!isWalkIn && (
               <div className="space-y-2">
-                <Label htmlFor="customer-select">Customer</Label>
+                <Label htmlFor="customer-search">Customer</Label>
                 <div className="relative">
                   <Input
                     id="customer-search"

@@ -131,9 +131,9 @@ export default function NewPurchasePage() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Supplier</Label>
+                <Label htmlFor="purchase-supplier">Supplier</Label>
                 <Select value={supplierId} onValueChange={setSupplierId}>
-                  <SelectTrigger className="rounded-[24px]">
+                  <SelectTrigger id="purchase-supplier" className="rounded-[24px]">
                     <SelectValue placeholder="Select supplier" />
                   </SelectTrigger>
                   <SelectContent>
@@ -146,8 +146,8 @@ export default function NewPurchasePage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Notes</Label>
-                <Input value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Optional notes" className="rounded-[24px]" />
+                <Label htmlFor="purchase-notes">Notes</Label>
+                <Input id="purchase-notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Optional notes" className="rounded-[24px]" />
               </div>
             </div>
           </CardContent>

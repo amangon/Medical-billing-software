@@ -85,12 +85,12 @@ export default function BrandsPage() {
             </DialogHeader>
             <form onSubmit={handleCreate} className="space-y-4">
               <div className="space-y-2">
-                <Label>Name</Label>
-                <Input value={name} onChange={(e) => setName(e.target.value)} required />
+                <Label htmlFor="brand-name">Name</Label>
+                <Input id="brand-name" value={name} onChange={(e) => setName(e.target.value)} required />
               </div>
               <div className="space-y-2">
-                <Label>Description</Label>
-                <Input value={description} onChange={(e) => setDescription(e.target.value)} />
+                <Label htmlFor="brand-description">Description</Label>
+                <Input id="brand-description" value={description} onChange={(e) => setDescription(e.target.value)} />
               </div>
               <Button type="submit" className="w-full">Create</Button>
             </form>
