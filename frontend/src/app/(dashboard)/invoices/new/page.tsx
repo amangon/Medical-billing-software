@@ -946,24 +946,27 @@ export default function NewInvoicePage() {
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label>Name *</Label>
+              <Label htmlFor="new-customer-name">Name *</Label>
               <Input
+                id="new-customer-name"
                 value={newCustomerForm.name}
                 onChange={(e) => setNewCustomerForm({ ...newCustomerForm, name: e.target.value })}
                 className="bg-white"
               />
             </div>
             <div className="space-y-2">
-              <Label>Phone *</Label>
+              <Label htmlFor="new-customer-phone">Phone *</Label>
               <Input
+                id="new-customer-phone"
                 value={newCustomerForm.phone}
                 onChange={(e) => setNewCustomerForm({ ...newCustomerForm, phone: e.target.value })}
                 className="bg-white"
               />
             </div>
             <div className="space-y-2">
-              <Label>Email</Label>
+              <Label htmlFor="new-customer-email">Email</Label>
               <Input
+                id="new-customer-email"
                 type="email"
                 value={newCustomerForm.email}
                 onChange={(e) => setNewCustomerForm({ ...newCustomerForm, email: e.target.value })}
@@ -971,8 +974,9 @@ export default function NewInvoicePage() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Address</Label>
+              <Label htmlFor="new-customer-address">Address</Label>
               <Input
+                id="new-customer-address"
                 value={newCustomerForm.address}
                 onChange={(e) => setNewCustomerForm({ ...newCustomerForm, address: e.target.value })}
                 className="bg-white"
