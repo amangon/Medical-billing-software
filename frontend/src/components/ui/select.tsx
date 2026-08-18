@@ -55,7 +55,7 @@ const SelectTrigger = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttrib
       type="button"
       onClick={() => setOpen?.(!open)}
       className={cn(
-        'flex h-10 w-full items-center justify-between rounded-[20px] border border-border bg-white px-4 py-2.5 text-sm text-foreground ring-offset-background placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+        'flex h-10 w-full items-center justify-between rounded-[20px] border border-[#E8E0D0] bg-white px-4 py-2.5 text-sm text-[#111827] ring-offset-background placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
         className
       )}
       aria-expanded={open}
@@ -106,7 +106,7 @@ const SelectContent = ({ children, className }: { children: React.ReactNode; cla
     <div
       data-select-content
       className={cn(
-        'absolute z-60 mt-1 max-h-60 w-full overflow-auto rounded-xl border border-border bg-white text-foreground shadow-xl',
+        'absolute z-60 mt-1 max-h-60 w-full overflow-auto rounded-xl border border-[#E8E0D0] bg-white text-[#111827] shadow-xl',
         className
       )}
     >

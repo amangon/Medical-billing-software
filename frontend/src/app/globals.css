@@ -56,7 +56,9 @@
   select,
   textarea,
   button {
-    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
   }
 
   img,
@@ -130,7 +132,7 @@
     background: #B8AD9A;
   }
 
-  a, button, input, select, textarea {
+  a, button {
     @apply transition-all duration-200;
   }
 
