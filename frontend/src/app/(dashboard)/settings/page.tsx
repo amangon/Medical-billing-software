@@ -262,7 +262,7 @@ export default function SettingsPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Logo</Label>
+                    <p className="text-sm font-medium">Logo</p>
                     <div className="flex items-center gap-3">
                       {logoPreview ? (
                         <div className="relative h-16 w-16 overflow-hidden rounded-lg border border-border">
@@ -301,7 +301,7 @@ export default function SettingsPage() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label>Signature</Label>
+                    <p className="text-sm font-medium">Signature</p>
                     <div className="flex items-center gap-3">
                       {signaturePreview ? (
                         <div className="relative h-16 w-32 overflow-hidden rounded-lg border border-border">
@@ -448,21 +448,21 @@ export default function SettingsPage() {
               <CardTitle>Printer Settings</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label>Enable Printer</Label>
-                  <p className="text-sm text-muted-foreground">Auto-print invoices and receipts</p>
-                </div>
-                <Switch />
-              </div>
-              <Separator />
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label>Auto Print</Label>
-                  <p className="text-sm text-muted-foreground">Automatically print after order</p>
-                </div>
-                <Switch />
-              </div>
+               <div className="flex items-center justify-between">
+                 <div>
+                   <p className="text-sm font-medium">Enable Printer</p>
+                   <p className="text-sm text-muted-foreground">Auto-print invoices and receipts</p>
+                 </div>
+                 <Switch />
+               </div>
+               <Separator />
+               <div className="flex items-center justify-between">
+                 <div>
+                   <p className="text-sm font-medium">Auto Print</p>
+                   <p className="text-sm text-muted-foreground">Automatically print after order</p>
+                 </div>
+                 <Switch />
+               </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -473,37 +473,37 @@ export default function SettingsPage() {
               <CardTitle>Notification Settings</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label>Low Stock Alerts</Label>
-                  <p className="text-sm text-muted-foreground">Get notified when stock is low</p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <Separator />
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label>Expiry Alerts</Label>
-                  <p className="text-sm text-muted-foreground">Get notified about expiring products</p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <Separator />
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label>Payment Reminders</Label>
-                  <p className="text-sm text-muted-foreground">Remind customers about pending payments</p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <Separator />
-              <div className="flex items-center justify-between">
-                <div>
-                  <Label>Email Notifications</Label>
-                  <p className="text-sm text-muted-foreground">Receive notifications via email</p>
-                </div>
-                <Switch defaultChecked />
-              </div>
+               <div className="flex items-center justify-between">
+                 <div>
+                   <p className="text-sm font-medium">Low Stock Alerts</p>
+                   <p className="text-sm text-muted-foreground">Get notified when stock is low</p>
+                 </div>
+                 <Switch defaultChecked />
+               </div>
+               <Separator />
+               <div className="flex items-center justify-between">
+                 <div>
+                   <p className="text-sm font-medium">Expiry Alerts</p>
+                   <p className="text-sm text-muted-foreground">Get notified about expiring products</p>
+                 </div>
+                 <Switch defaultChecked />
+               </div>
+               <Separator />
+               <div className="flex items-center justify-between">
+                 <div>
+                   <p className="text-sm font-medium">Payment Reminders</p>
+                   <p className="text-sm text-muted-foreground">Remind customers about pending payments</p>
+                 </div>
+                 <Switch defaultChecked />
+               </div>
+               <Separator />
+               <div className="flex items-center justify-between">
+                 <div>
+                   <p className="text-sm font-medium">Email Notifications</p>
+                   <p className="text-sm text-muted-foreground">Receive notifications via email</p>
+                 </div>
+                 <Switch defaultChecked />
+               </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -521,10 +521,10 @@ export default function SettingsPage() {
                   ) : (
                     <Sun className="h-5 w-5" />
                   )}
-                  <div>
-                    <Label>Dark Mode</Label>
-                    <p className="text-sm text-muted-foreground">Toggle dark mode</p>
-                  </div>
+                   <div>
+                     <p className="text-sm font-medium">Dark Mode</p>
+                     <p className="text-sm text-muted-foreground">Toggle dark mode</p>
+                   </div>
                 </div>
                 <Switch
                   checked={theme === 'dark'}

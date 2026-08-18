@@ -149,7 +149,7 @@ export default function NewOrderPage() {
               <div className="space-y-2">
                 <Label htmlFor="customerId">Customer</Label>
                 <Select value={customerId} onValueChange={handleCustomerChange}>
-                  <SelectTrigger className="bg-white rounded-[24px]">
+                  <SelectTrigger id="customerId" className="bg-white rounded-[24px]">
                     <SelectValue placeholder="Walk-in Customer" />
                   </SelectTrigger>
                   <SelectContent>

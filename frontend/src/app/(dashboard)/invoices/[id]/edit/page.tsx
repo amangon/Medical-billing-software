@@ -371,9 +371,9 @@ export default function EditInvoicePage() {
                     value={customerId}
                     onValueChange={handleCustomerChange}
                   >
-                    <SelectTrigger className="bg-white rounded-[24px]">
-                      <SelectValue placeholder="Select a customer" />
-                    </SelectTrigger>
+                  <SelectTrigger id="customerId" className="bg-white rounded-[24px]">
+                    <SelectValue placeholder="Select a customer" />
+                  </SelectTrigger>
                     <SelectContent>
                       {filteredCustomers.map((customer: { id: string; name: string }) => (
                         <SelectItem key={customer.id} value={customer.id}>
@@ -483,7 +483,7 @@ export default function EditInvoicePage() {
                   value={watch('invoiceType')}
                   onValueChange={(value) => setValue('invoiceType', value as InvoiceInput['invoiceType'])}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger id="invoiceType">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

@@ -126,7 +126,7 @@ export default function EditProductPage() {
               <div className="space-y-2">
                 <Label htmlFor="discountType">Discount Type</Label>
                 <Select value={discountType} onValueChange={(value) => setValue('discountType', value as 'AMOUNT' | 'PERCENTAGE')}>
-                  <SelectTrigger>
+                  <SelectTrigger id="discountType">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
