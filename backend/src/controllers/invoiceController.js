@@ -27,10 +27,12 @@ export const createInvoice = async (req, res, next) => {
 
 export const getInvoices = async (req, res, next) => {
   try {
-    const { page = 1, limit = 20, search, invoiceType, paymentStatus, startDate, endDate } = req.query;
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 20));
+    const { search, invoiceType, paymentStatus, startDate, endDate } = req.query;
     const result = await getInvoicesService(req.user.businessId, {
-      page: parseInt(page),
-      limit: parseInt(limit),
+      page,
+      limit,
       search,
       invoiceType,
       paymentStatus,
