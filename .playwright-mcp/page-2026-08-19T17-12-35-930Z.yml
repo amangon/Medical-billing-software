@@ -1,0 +1,30 @@
+- generic [active] [ref=f2e1]:
+  - generic [ref=f2e5]:
+    - generic [ref=f2e6]:
+      - link [ref=f2e7] [cursor=pointer]:
+        - /url: /
+      - heading "Create an account" [level=1] [ref=f2e13]
+      - paragraph [ref=f2e14]: Start your free trial today
+    - generic [ref=f2e15]:
+      - generic [ref=f2e16]:
+        - generic [ref=f2e17]: Full Name
+        - textbox "Full Name" [ref=f2e18]
+      - generic [ref=f2e19]:
+        - generic [ref=f2e20]: Email
+        - textbox "Email" [ref=f2e21]
+      - generic [ref=f2e22]:
+        - generic [ref=f2e23]: Password
+        - textbox "Password" [ref=f2e24]
+      - generic [ref=f2e25]:
+        - generic [ref=f2e26]: Business Name
+        - textbox "Business Name" [ref=f2e27]
+      - generic [ref=f2e28]:
+        - generic [ref=f2e29]: Business Type
+        - textbox "Business Type" [ref=f2e30]:
+          - /placeholder: e.g., Retail, Restaurant, Service
+      - button "Create Account" [ref=f2e31] [cursor=pointer]
+    - paragraph [ref=f2e33]:
+      - text: Already have an account?
+      - link "Sign in" [ref=f2e34] [cursor=pointer]:
+        - /url: /login
+  - alert [ref=f2e35]

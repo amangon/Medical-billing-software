@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils"
 
 const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, type, value, name, ...props }, ref) => {
+    const isControlled = value !== undefined
     return (
       <input
         type={type}
@@ -12,7 +13,7 @@ const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLI
           className
         )}
         ref={ref}
-        value={value ?? ""}
+        {...(isControlled ? { value: value ?? "" } : {})}
         {...props}
       />
     )
