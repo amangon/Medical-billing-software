@@ -2,7 +2,6 @@ import {
   createInvoice as createInvoiceService,
   listInvoices as getInvoicesService,
   getInvoice as getInvoiceService,
-  generatePDF as generateInvoicePDF,
   updateInvoice as updateInvoiceService,
   updateStatus,
   shareInvoice as shareInvoiceService,
@@ -127,34 +126,6 @@ export const updateInvoiceStatus = async (req, res, next) => {
       include: { customer: true },
     });
     res.json(invoice);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const downloadInvoicePdf = async (req, res, next) => {
-  try {
-    const { type = 'A4' } = req.query;
-    const { pdfBuffer, invoice } = await generateInvoicePDF(req.params.id, req.user.businessId, type);
-    res.setHeader('Content-Type', 'application/pdf');
-    const filename = encodeURIComponent(invoice.invoiceNumber) + '.pdf';
-    res.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${filename}`);
-    res.setHeader('Content-Length', Buffer.byteLength(pdfBuffer));
-    res.send(pdfBuffer);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getPrintView = async (req, res, next) => {
-  try {
-    const { pdfBuffer } = await generateInvoicePDF(req.params.id, req.user.businessId);
-    await prisma.invoice.update({
-      where: { id: req.params.id },
-      data: { isPrinted: true },
-    });
-    res.setHeader('Content-Type', 'application/pdf');
-    res.send(pdfBuffer);
   } catch (error) {
     next(error);
   }

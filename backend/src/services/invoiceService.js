@@ -1,7 +1,6 @@
 import prisma from '../config/db.js';
 import { generateNumber } from '../utils/generateNumber.js';
 import { buildSearchFilter, dateRangeFilter } from '../utils/helpers.js';
-import { generateInvoicePDF } from '../utils/pdfGenerator.js';
 import { generateUPIQR } from '../utils/qrGenerator.js';
 import { ApiError } from '../middleware/errorHandler.js';
 
@@ -548,16 +547,6 @@ export async function updateStatus(id, businessId, status) {
   }
 }
 
-export async function generatePDF(id, businessId, type = 'a4') {
-  try {
-    const invoice = await getInvoice(id, businessId);
-    if (!invoice) throw new Error('Invoice not found');
-    return generateInvoicePDF(invoice, invoice.business, type);
-  } catch (err) {
-    throw err;
-  }
-}
-
 export async function getPrintData(id, businessId) {
   try {
     return await getInvoice(id, businessId);
@@ -575,8 +564,7 @@ export async function shareViaEmail(id, businessId, email, pdfBase64) {
     if (pdfBase64) {
       pdfBuffer = Buffer.from(pdfBase64, 'base64')
     } else {
-      const result = await generateInvoicePDF(invoice, invoice.business, 'a4');
-      pdfBuffer = result.pdfBuffer
+      throw new Error('PDF attachment is required for email sharing');
     }
     
     const { sendInvoiceEmail } = await import('../utils/email.js');

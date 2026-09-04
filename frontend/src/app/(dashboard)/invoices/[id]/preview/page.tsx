@@ -45,32 +45,9 @@ export default function InvoicePreviewPage() {
     window.print()
   }
 
-  const handleDownloadPDF = async () => {
+  const handleDownloadPDF = () => {
     if (!invoice) return
-    setDownloading(true)
-    try {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null
-      const res = await fetch(`/api/invoices/${id}/pdf`, {
-        headers: {
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      })
-      if (!res.ok) throw new Error('Failed to download PDF')
-      const blob = await res.blob()
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `${invoice.invoiceNumber}.pdf`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      window.URL.revokeObjectURL(url)
-      toast.success('PDF downloaded successfully')
-    } catch {
-      toast.error('Failed to download PDF')
-    } finally {
-      setDownloading(false)
-    }
+    window.print()
   }
 
   if (loading) {
