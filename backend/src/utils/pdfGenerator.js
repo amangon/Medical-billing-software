@@ -267,7 +267,7 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
   const billToLines = [
     safeText(customer.name) || 'Walk-in Customer',
     safeText(customer.phone) ? `Mobile: ${customer.phone}` : '',
-    safeText(customer.email) ? `Email: ${customer.email}` : '',
+    safeText(customer.email) && customer.email !== 'undefined' ? `Email: ${customer.email}` : '',
     safeText(customer.gstin) ? `GSTIN: ${customer.gstin}` : '',
     [customer.address, customer.city, customer.state, customer.pincode].filter(Boolean).join(', ') || '-',
   ].filter((l) => l)
