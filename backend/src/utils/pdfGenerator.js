@@ -320,7 +320,7 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
     { key: 'rate', label: 'RATE', width: MM(14) },
     { key: 'sgst', label: 'SGST', width: MM(14) },
     { key: 'cgst', label: 'CGST', width: MM(14) },
-    { key: 'amount', label: 'AMOUNT', width: MM(20) },
+    { key: 'amount', label: 'AMOUNT', width: MM(19) },
   ]
   const tableX = PAGE_MARGIN
   const headerRowHeight = MM(10)
