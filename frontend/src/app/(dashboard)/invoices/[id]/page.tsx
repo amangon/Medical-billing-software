@@ -37,7 +37,7 @@ import { QRCodeSVG } from 'qrcode.react'
 import { motion } from 'framer-motion'
 import { api } from '@/lib/api'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { InvoiceDocument } from '@/components/invoices/invoice-document'
+import { InvoiceDocument } from '@/components/invoices/InvoiceDocument'
 
 const PAYMENT_STATUSES: Record<string, { label: string; color: string; bg: string; icon: any }> = {
   PAID: {
@@ -315,7 +315,7 @@ export default function InvoiceDetailPage() {
         @media print {
           @page {
             size: A4 portrait;
-            margin: 8mm;
+            margin: 0;
           }
           body * {
             visibility: hidden;
@@ -327,9 +327,9 @@ export default function InvoiceDetailPage() {
             position: absolute;
             left: 0;
             top: 0;
-            width: 194mm;
-            min-height: 279mm;
-            padding: 0;
+            width: 210mm;
+            min-height: 297mm;
+            padding: 8mm;
             margin: 0;
             background: white;
             box-shadow: none !important;

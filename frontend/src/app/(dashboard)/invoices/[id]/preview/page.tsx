@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Printer, Download, ArrowLeft, Loader2 } from 'lucide-react'
 import { api } from '@/lib/api'
 import { toast } from 'react-hot-toast'
-import { InvoiceDocument } from '@/components/invoices/invoice-document'
+import { InvoiceDocument } from '@/components/invoices/InvoiceDocument'
 
 export default function InvoicePreviewPage() {
   const { id } = useParams() as { id: string }
@@ -99,7 +99,7 @@ export default function InvoicePreviewPage() {
         @media print {
           @page {
             size: A4 portrait;
-            margin: 8mm;
+            margin: 0;
           }
           body * {
             visibility: hidden;
@@ -111,13 +111,14 @@ export default function InvoicePreviewPage() {
             position: absolute;
             left: 0;
             top: 0;
-            width: 194mm;
-            min-height: 279mm;
-            padding: 0;
+            width: 210mm;
+            min-height: 297mm;
+            padding: 8mm;
             margin: 0;
             background: white;
             box-shadow: none !important;
             border: none !important;
+            border-radius: 0 !important;
           }
           .no-print {
             display: none !important;
@@ -156,7 +157,7 @@ export default function InvoicePreviewPage() {
 
       {/* Invoice Paper */}
       <div className="flex justify-center py-8 px-4">
-        <div className="bg-white border border-gray-300" style={{ boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+        <div id="invoice-print-area" className="bg-white border border-gray-300" style={{ boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
           <InvoiceDocument invoice={invoice} business={business} />
         </div>
       </div>

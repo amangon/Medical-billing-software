@@ -13,6 +13,7 @@ type Customer = {
   city?: string
   state?: string
   pincode?: string
+  placeOfSupply?: string
 }
 
 type Business = {
@@ -86,56 +87,55 @@ export function InvoiceDocument({ invoice, business }: { invoice: Invoice; busin
 
   return (
     <div
-      id="invoice-print-area"
-      className="bg-white"
       style={{
-        width: '194mm',
-        minHeight: '279mm',
+        width: '210mm',
+        minHeight: '297mm',
         padding: '8mm',
         boxSizing: 'border-box',
         fontFamily: 'Arial, Helvetica, sans-serif',
         color: '#000',
         fontSize: '10pt',
         lineHeight: 1.35,
+        background: '#fff',
       }}
     >
       {/* Header */}
       <div
         style={{
           borderBottom: '1px solid #000',
-          paddingBottom: '6mm',
+          paddingBottom: '5mm',
           marginBottom: '4mm',
         }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '4mm' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '4mm' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '3mm', flex: 1 }}>
             {b?.logo && (
-              <div style={{ width: '16mm', height: '16mm', position: 'relative', flexShrink: 0 }}>
+              <div style={{ width: '14mm', height: '14mm', position: 'relative', flexShrink: 0 }}>
                 <Image src={b.logo} alt={b.name || 'Logo'} fill style={{ objectFit: 'contain' }} />
               </div>
             )}
             <div>
-              <div style={{ fontWeight: 'bold', fontSize: '12pt' }}>{b?.name || 'Business Name'}</div>
-              <div style={{ fontSize: '9pt', color: '#333', marginTop: '1mm' }}>
+              <div style={{ fontWeight: 'bold', fontSize: '11pt' }}>{b?.name || 'Business Name'}</div>
+              <div style={{ fontSize: '9pt', color: '#333', marginTop: '0.5mm' }}>
                 {[b?.address, b?.city, b?.state, b?.pincode].filter(Boolean).join(', ') || '-'}
               </div>
-              <div style={{ fontSize: '9pt', color: '#333', marginTop: '1mm' }}>
+              <div style={{ fontSize: '9pt', color: '#333', marginTop: '0.5mm' }}>
                 {b?.phone && <span>Mobile: {b.phone}</span>}
                 {b?.phone && b?.email && <span> | </span>}
                 {b?.email && <span>{b.email}</span>}
               </div>
-              <div style={{ fontSize: '9pt', color: '#333', marginTop: '1mm' }}>
+              <div style={{ fontSize: '9pt', color: '#333', marginTop: '0.5mm' }}>
                 {b?.gstin && <span>GSTIN: {b.gstin}</span>}
               </div>
             </div>
           </div>
-          <div style={{ textAlign: 'right' }}>
+          <div style={{ textAlign: 'right', flexShrink: 0 }}>
             <div style={{ fontSize: '9pt', fontWeight: 600, color: '#555' }}>Invoice No.</div>
             <div style={{ fontSize: '10pt', fontWeight: 'bold' }}>{invoice?.invoiceNumber || '-'}</div>
-            <div style={{ fontSize: '9pt', fontWeight: 600, color: '#555', marginTop: '3mm' }}>Invoice Date</div>
-             <div style={{ fontSize: '10pt' }}>{invoice?.invoiceDate ? formatDate(invoice.invoiceDate) : '-'}</div>
-             <div style={{ fontSize: '9pt', fontWeight: 600, color: '#555', marginTop: '3mm' }}>Due Date</div>
-             <div style={{ fontSize: '10pt' }}>{invoice?.dueDate ? formatDate(invoice.dueDate) : '-'}</div>
+            <div style={{ fontSize: '9pt', fontWeight: 600, color: '#555', marginTop: '2mm' }}>Invoice Date</div>
+            <div style={{ fontSize: '10pt' }}>{invoice?.invoiceDate ? formatDate(invoice.invoiceDate) : '-'}</div>
+            <div style={{ fontSize: '9pt', fontWeight: 600, color: '#555', marginTop: '2mm' }}>Due Date</div>
+            <div style={{ fontSize: '10pt' }}>{invoice?.dueDate ? formatDate(invoice.dueDate) : '-'}</div>
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '3mm' }}>
@@ -158,7 +158,7 @@ export function InvoiceDocument({ invoice, business }: { invoice: Invoice; busin
         }}
       >
         <div style={{ borderRight: '1px solid #000', padding: '3mm' }}>
-          <div style={{ fontSize: '9pt', fontWeight: 'bold', marginBottom: '2mm' }}>BILL TO</div>
+          <div style={{ fontSize: '9pt', fontWeight: 'bold', marginBottom: '1.5mm' }}>BILL TO</div>
           <div style={{ fontSize: '9pt', lineHeight: 1.4 }}>
             <div style={{ fontWeight: 'bold' }}>{customer?.name || 'Walk-in Customer'}</div>
             {customer?.phone && <div>Mobile: {customer.phone}</div>}
@@ -170,7 +170,7 @@ export function InvoiceDocument({ invoice, business }: { invoice: Invoice; busin
           </div>
         </div>
         <div style={{ padding: '3mm' }}>
-          <div style={{ fontSize: '9pt', fontWeight: 'bold', marginBottom: '2mm' }}>SHIP TO</div>
+          <div style={{ fontSize: '9pt', fontWeight: 'bold', marginBottom: '1.5mm' }}>SHIP TO</div>
           <div style={{ fontSize: '9pt', lineHeight: 1.4 }}>
             <div style={{ fontWeight: 'bold' }}>{customer?.name || 'Walk-in Customer'}</div>
             <div>
@@ -193,15 +193,15 @@ export function InvoiceDocument({ invoice, business }: { invoice: Invoice; busin
         >
           <colgroup>
             <col style={{ width: '5%' }} />
-            <col style={{ width: '32%' }} />
+            <col style={{ width: '34%' }} />
             <col style={{ width: '8%' }} />
             <col style={{ width: '10%' }} />
             <col style={{ width: '9%' }} />
             <col style={{ width: '6%' }} />
             <col style={{ width: '8%' }} />
             <col style={{ width: '10%' }} />
-            <col style={{ width: '6%' }} />
-            <col style={{ width: '6%' }} />
+            <col style={{ width: '5%' }} />
+            <col style={{ width: '5%' }} />
             <col style={{ width: '10%' }} />
           </colgroup>
           <thead>
@@ -236,7 +236,7 @@ export function InvoiceDocument({ invoice, business }: { invoice: Invoice; busin
                   <td style={tdCenterStyle}>{index + 1}</td>
                   <td style={tdLeftStyle}>
                     <div style={{ fontWeight: 500 }}>{product?.name || item?.productId || '-'}</div>
-                    {product?.sku && <div style={{ color: '#666' }}>SKU: {product.sku}</div>}
+                    {product?.sku && <div style={{ color: '#666', fontSize: '8pt' }}>SKU: {product.sku}</div>}
                   </td>
                   <td style={tdCenterStyle}>{product?.hsnCode || '-'}</td>
                   <td style={tdCenterStyle}>-</td>
@@ -267,7 +267,7 @@ export function InvoiceDocument({ invoice, business }: { invoice: Invoice; busin
       <div style={{ border: '1px solid #000', padding: '3mm', marginBottom: '4mm' }}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4mm' }}>
           <div>
-            <div style={{ fontSize: '9pt', fontWeight: 'bold', marginBottom: '2mm' }}>Summary</div>
+            <div style={{ fontSize: '9pt', fontWeight: 'bold', marginBottom: '1.5mm' }}>Summary</div>
             <div style={{ fontSize: '9pt', lineHeight: 1.5 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span>Subtotal:</span>
@@ -307,7 +307,7 @@ export function InvoiceDocument({ invoice, business }: { invoice: Invoice; busin
                 <span>Grand Total:</span>
                 <span>{formatCurrency(totalAmount)}</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2mm' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1.5mm' }}>
                 <span>Amount Received:</span>
                 <span>{formatCurrency(paidAmount)}</span>
               </div>
@@ -318,7 +318,7 @@ export function InvoiceDocument({ invoice, business }: { invoice: Invoice; busin
             </div>
           </div>
           <div>
-            <div style={{ fontSize: '9pt', fontWeight: 'bold', marginBottom: '2mm' }}>Amount in Words</div>
+            <div style={{ fontSize: '9pt', fontWeight: 'bold', marginBottom: '1.5mm' }}>Amount in Words</div>
             <div
               style={{
                 fontSize: '9pt',
