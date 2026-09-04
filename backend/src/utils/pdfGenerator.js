@@ -12,6 +12,7 @@ const PAGE_MARGIN = MM(15)
 const A4_WIDTH = MM(210)
 const A4_HEIGHT = MM(297)
 const CONTENT_WIDTH = A4_WIDTH - PAGE_MARGIN * 2
+const RIGHT_EDGE = PAGE_MARGIN + CONTENT_WIDTH
 
 const COLORS = {
   text: '#000000',
@@ -22,15 +23,6 @@ const COLORS = {
 
 function round2(value) {
   return Math.round((value + Number.EPSILON) * 100) / 100
-}
-
-function registerFonts(doc) {
-  try {
-    doc.registerFont('normal', path.join(FONTS_DIR, 'NotoSans-Regular.ttf'))
-    doc.registerFont('bold', path.join(FONTS_DIR, 'NotoSans-Bold.ttf'))
-  } catch {
-    // fonts may not exist in all environments
-  }
 }
 
 function safeText(val) {
@@ -89,13 +81,69 @@ function addPageIfNeeded(doc, y, requiredHeight) {
   return y
 }
 
+function measureTextLines(doc, text, width, fontSize, fontName) {
+  doc.font(fontName).fontSize(fontSize)
+  const lines = []
+  const words = String(text).split(' ')
+  let currentLine = ''
+  for (const word of words) {
+    const testLine = currentLine ? currentLine + ' ' + word : word
+    const testWidth = doc.widthOfString(testLine)
+    if (testWidth > width && currentLine) {
+      lines.push(currentLine)
+      currentLine = word
+    } else {
+      currentLine = testLine
+    }
+  }
+  if (currentLine) lines.push(currentLine)
+  return lines
+}
+
+function drawCell(doc, x, y, w, h, text, opts = {}) {
+  const fontSize = opts.fontSize || 8
+  const fontName = opts.font === 'bold' ? 'Helvetica-Bold' : 'Helvetica'
+  const color = opts.color || COLORS.text
+  const bgColor = opts.bgColor || COLORS.white
+  const borderColor = opts.borderColor || COLORS.border
+  const align = opts.align || 'center'
+  const padding = opts.padding || MM(3)
+
+  if (bgColor) {
+    doc.fillColor(bgColor)
+    doc.rect(x, y, w, h, 'F')
+  }
+
+  doc.strokeColor(borderColor)
+  doc.lineWidth(0.5)
+  doc.rect(x, y, w, h, 'S')
+
+  if (text !== null && text !== undefined && text !== '') {
+    doc.fillColor(color)
+    doc.font(fontName).fontSize(fontSize)
+    const textWidth = w - padding * 2
+    const lines = measureTextLines(doc, String(text), textWidth, fontSize, fontName)
+    const lineHeight = fontSize * 0.35
+    const textBlockHeight = lines.length * lineHeight
+    let textY = y + (h - textBlockHeight) / 2 + lineHeight * 0.8
+    for (const line of lines) {
+      let textX = x + padding
+      if (align === 'right') {
+        textX = x + w - padding - doc.widthOfString(line)
+      } else if (align === 'center') {
+        textX = x + (w - doc.widthOfString(line)) / 2
+      }
+      doc.text(line, textX, textY)
+      textY += lineHeight
+    }
+  }
+}
+
 export async function generateInvoicePDF(invoice, business, format = 'a4') {
   const doc = new PDFDocument({
     size: 'A4',
     margins: { top: PAGE_MARGIN, bottom: PAGE_MARGIN, left: PAGE_MARGIN, right: PAGE_MARGIN },
   })
-
-  registerFonts(doc)
 
   const b = business || invoice?.business || {}
   const items = invoice.items || []
@@ -123,11 +171,11 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
   const headerW = CONTENT_WIDTH
   let headerContentY = headerY + headerBorderPadding
 
-  doc.font('bold').fontSize(18)
+  doc.font('Helvetica-Bold').fontSize(18)
   doc.text('TAX INVOICE', headerX + headerBorderPadding, headerContentY)
   headerContentY += MM(7)
 
-  doc.font('normal').fontSize(9)
+  doc.font('Helvetica').fontSize(9)
   doc.text('ORIGINAL FOR RECIPIENT', headerX + headerBorderPadding, headerContentY)
   headerContentY += MM(10)
 
@@ -140,7 +188,7 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
   ].filter((l) => l)
 
   companyInfoLines.forEach((line) => {
-    doc.font('normal').fontSize(9)
+    doc.font('Helvetica').fontSize(9)
     doc.text(line, headerX + headerBorderPadding, headerContentY, { width: LEFT_COL_W - MM(8), lineBreak: false })
     headerContentY += MM(5)
   })
@@ -157,24 +205,24 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
 
   const metaX = headerX + LEFT_COL_W + MM(6)
   let metaY = headerY + headerBorderPadding
-  doc.font('bold').fontSize(9)
+  doc.font('Helvetica-Bold').fontSize(9)
   doc.text('Invoice No.', metaX, metaY, { width: META_COL_W, align: 'right' })
   metaY += MM(4)
-  doc.font('normal').fontSize(9)
+  doc.font('Helvetica').fontSize(9)
   doc.text(safeText(invoice.invoiceNumber), metaX, metaY, { width: META_COL_W, align: 'right' })
   metaY += MM(6)
 
-  doc.font('bold').fontSize(9)
+  doc.font('Helvetica-Bold').fontSize(9)
   doc.text('Invoice Date', metaX, metaY, { width: META_COL_W, align: 'right' })
   metaY += MM(4)
-  doc.font('normal').fontSize(9)
+  doc.font('Helvetica').fontSize(9)
   doc.text(formatDate(invoice.invoiceDate), metaX, metaY, { width: META_COL_W, align: 'right' })
   metaY += MM(6)
 
-  doc.font('bold').fontSize(9)
+  doc.font('Helvetica-Bold').fontSize(9)
   doc.text('Due Date', metaX, metaY, { width: META_COL_W, align: 'right' })
   metaY += MM(4)
-  doc.font('normal').fontSize(9)
+  doc.font('Helvetica').fontSize(9)
   doc.text(formatDate(invoice.dueDate), metaX, metaY, { width: META_COL_W, align: 'right' })
 
   const headerBottomY = Math.max(headerContentY, metaY + MM(6)) + MM(4)
@@ -190,7 +238,7 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
   const customer = invoice.customer || {}
   const sectionW = (CONTENT_WIDTH - MM(6)) / 2
   const sectionLabelY = y
-  doc.font('bold').fontSize(9)
+  doc.font('Helvetica-Bold').fontSize(9)
   doc.text('BILL TO', headerX, sectionLabelY, { width: sectionW })
   doc.text('SHIP TO', headerX + sectionW + MM(6), sectionLabelY, { width: sectionW })
 
@@ -209,7 +257,7 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
   ].filter((l) => l)
 
   let billY = sectionLabelY + MM(6)
-  doc.font('normal').fontSize(9)
+  doc.font('Helvetica').fontSize(9)
   billToLines.forEach((line) => {
     doc.text(line, headerX, billY, { width: sectionW - MM(4), lineBreak: false })
     billY += MM(5)
@@ -253,7 +301,7 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
   const minBodyRowHeight = MM(8)
 
   let currentX = tableX
-  doc.font('bold').fontSize(8)
+  doc.font('Helvetica-Bold').fontSize(8)
   colDefs.forEach((col) => {
     drawCell(doc, currentX, y, col.width, headerRowHeight, col.label, {
       fontSize: 8,
@@ -272,7 +320,7 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
       doc.addPage()
       y = PAGE_MARGIN
       let currentX = tableX
-      doc.font('bold').fontSize(8)
+      doc.font('Helvetica-Bold').fontSize(8)
       colDefs.forEach((col) => {
         drawCell(doc, currentX, y, col.width, headerRowHeight, col.label, {
           fontSize: 8,
@@ -311,15 +359,7 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
       formatCurrency(total),
     ]
 
-    let maxLines = 1
-    doc.font('normal').fontSize(8)
-    rowData.forEach((text, i) => {
-      const colW = colDefs[i].width - bodyRowPadding * 2
-      const lines = doc.splitTextToSize(String(text), colW)
-      maxLines = Math.max(maxLines, lines.length)
-    })
-
-    const rowHeight = Math.max(minBodyRowHeight, maxLines * bodyLineHeight + bodyRowPadding * 2)
+    const rowHeight = MM(10)
     const rowY = y
     const rowBgColor = idx % 2 === 0 ? COLORS.white : '#f5f5f5'
 
@@ -358,7 +398,7 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
   ]
   const totalRowHeight = MM(10)
   currentX = tableX
-  doc.font('bold').fontSize(9)
+  doc.font('Helvetica-Bold').fontSize(9)
   totalRowData.forEach((text, i) => {
     const colW = colDefs[i].width
     const align = i === 1 ? 'left' : (i >= 7 ? 'right' : 'center')
@@ -384,9 +424,9 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
   doc.lineWidth(0.5)
   doc.stroke()
 
-  doc.font('bold').fontSize(9)
+  doc.font('Helvetica-Bold').fontSize(9)
   doc.text('Payment', payX + MM(4), y + MM(4))
-  doc.font('normal').fontSize(9)
+  doc.font('Helvetica').fontSize(9)
   doc.text(`Received Amount: ${formatCurrency(paidAmount)}`, payX + MM(4), y + MM(10))
   doc.text('Payment Method: PhonePe / Google Pay / PayTM / UPI', payX + MM(4), y + MM(16))
 
@@ -407,9 +447,9 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
   // ===== SIGNATURE =====
   y = addPageIfNeeded(doc, y, MM(30))
   const sigX = RIGHT_EDGE - MM(70)
-  doc.font('bold').fontSize(9)
+  doc.font('Helvetica-Bold').fontSize(9)
   doc.text('Authorized Signatory', sigX, y, { width: MM(70), align: 'right' })
-  doc.font('normal').fontSize(9)
+  doc.font('Helvetica').fontSize(9)
   doc.text(safeText(b.name), sigX, y + MM(5), { width: MM(70), align: 'right' })
 
   if (b.signature) {
@@ -422,7 +462,7 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
 
   // ===== FOOTER =====
   const footerY = A4_HEIGHT - PAGE_MARGIN - MM(6)
-  doc.font('normal').fontSize(8)
+  doc.font('Helvetica').fontSize(8)
   doc.fillColor(COLORS.muted)
   doc.text('Thank you for your business!', PAGE_MARGIN + CONTENT_WIDTH / 2, footerY, { align: 'center' })
   doc.text(`Generated on ${formatDate(new Date().toISOString())}`, PAGE_MARGIN, footerY, { align: 'left' })
@@ -438,35 +478,6 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
     doc.on('error', reject)
     doc.end()
   })
-}
-
-function drawCell(doc, x, y, w, h, text, opts = {}) {
-  const fontSize = opts.fontSize || 8
-  const font = opts.font || 'normal'
-  const color = opts.color || COLORS.text
-  const bgColor = opts.bgColor || COLORS.white
-  const borderColor = opts.borderColor || COLORS.border
-  const align = opts.align || 'center'
-  const padding = opts.padding || MM(3)
-
-  if (bgColor) {
-    doc.fillColor(bgColor)
-    doc.rect(x, y, w, h, 'F')
-  }
-
-  doc.strokeColor(borderColor)
-  doc.lineWidth(0.5)
-  doc.rect(x, y, w, h, 'S')
-
-  if (text !== null && text !== undefined && text !== '') {
-    doc.fillColor(color)
-    doc.font(font).fontSize(fontSize)
-    const lines = doc.splitTextToSize(String(text), w - padding * 2)
-    const lineHeight = fontSize * 0.35
-    const textBlockHeight = lines.length * lineHeight
-    let textY = y + (h - textBlockHeight) / 2 + lineHeight * 0.8
-    doc.text(lines, x + padding, textY, { width: w - padding * 2, align, lineBreak: false })
-  }
 }
 
 export default { generateInvoicePDF }
