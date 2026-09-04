@@ -115,6 +115,10 @@ export default function InvoicePreviewPage() {
     <div className="min-h-screen bg-gray-100">
       <style>{`
         @media print {
+          @page {
+            size: A4 portrait;
+            margin: 8mm;
+          }
           body * {
             visibility: hidden;
           }
@@ -125,18 +129,41 @@ export default function InvoicePreviewPage() {
             position: absolute;
             left: 0;
             top: 0;
-            width: 100%;
+            width: 194mm;
+            min-height: 279mm;
             padding: 0;
             margin: 0;
             background: white;
             box-shadow: none !important;
+            border: none !important;
+          }
+          #invoice-print-area table {
+            table-layout: fixed;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            line-height: 1.3;
+          }
+          #invoice-print-area th,
+          #invoice-print-area td {
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            white-space: normal;
+            line-height: 1.3;
+            vertical-align: top;
+          }
+          #invoice-print-area thead {
+            display: table-header-group;
+          }
+          #invoice-print-area tr {
+            break-inside: avoid;
+            page-break-inside: avoid;
+          }
+          #invoice-print-area tfoot {
+            display: table-footer-group;
           }
           .no-print {
             display: none !important;
-          }
-          @page {
-            size: A4;
-            margin: 15mm;
           }
         }
       `}</style>
@@ -174,8 +201,8 @@ export default function InvoicePreviewPage() {
       <div className="flex justify-center py-8 px-4">
         <div
           id="invoice-print-area"
-          className="bg-white shadow-lg border border-gray-300"
-          style={{ width: '210mm', minHeight: '297mm', padding: '15mm' }}
+          className="bg-white border border-gray-300"
+          style={{ width: '194mm', minHeight: '279mm', padding: '8mm' }}
         >
           {/* Header */}
           <div className="border-b border-black pb-4 mb-4">
@@ -248,20 +275,33 @@ export default function InvoicePreviewPage() {
 
           {/* Items Table */}
           <div className="border border-black mb-4">
-            <table className="w-full border-collapse text-xs">
+            <table className="w-full border-collapse text-xs" style={{ tableLayout: 'fixed' }}>
+              <colgroup>
+                <col style={{ width: '5%' }} />
+                <col style={{ width: '30%' }} />
+                <col style={{ width: '8%' }} />
+                <col style={{ width: '10%' }} />
+                <col style={{ width: '9%' }} />
+                <col style={{ width: '6%' }} />
+                <col style={{ width: '8%' }} />
+                <col style={{ width: '10%' }} />
+                <col style={{ width: '8%' }} />
+                <col style={{ width: '8%' }} />
+                <col style={{ width: '8%' }} />
+              </colgroup>
               <thead>
                 <tr className="bg-black text-white">
-                  <th className="border border-black p-2 text-left font-bold w-8">S.NO.</th>
+                  <th className="border border-black p-2 text-left font-bold">S.NO.</th>
                   <th className="border border-black p-2 text-left font-bold">ITEMS</th>
-                  <th className="border border-black p-2 text-center font-bold w-12">HSN</th>
-                  <th className="border border-black p-2 text-center font-bold w-16">BATCH NO.</th>
-                  <th className="border border-black p-2 text-center font-bold w-16">EXP. DATE</th>
-                  <th className="border border-black p-2 text-center font-bold w-10">QTY.</th>
-                  <th className="border border-black p-2 text-right font-bold w-14">MRP</th>
-                  <th className="border border-black p-2 text-right font-bold w-14">RATE</th>
-                  <th className="border border-black p-2 text-right font-bold w-14">SGST</th>
-                  <th className="border border-black p-2 text-right font-bold w-14">CGST</th>
-                  <th className="border border-black p-2 text-right font-bold w-16">AMOUNT</th>
+                  <th className="border border-black p-2 text-center font-bold">HSN</th>
+                  <th className="border border-black p-2 text-center font-bold">BATCH NO.</th>
+                  <th className="border border-black p-2 text-center font-bold">EXP. DATE</th>
+                  <th className="border border-black p-2 text-center font-bold">QTY.</th>
+                  <th className="border border-black p-2 text-right font-bold">MRP</th>
+                  <th className="border border-black p-2 text-right font-bold">RATE</th>
+                  <th className="border border-black p-2 text-right font-bold">SGST</th>
+                  <th className="border border-black p-2 text-right font-bold">CGST</th>
+                  <th className="border border-black p-2 text-right font-bold">AMOUNT</th>
                 </tr>
               </thead>
               <tbody>
@@ -278,20 +318,20 @@ export default function InvoicePreviewPage() {
 
                   return (
                     <tr key={item.id || index}>
-                      <td className="border border-black p-2 text-center">{index + 1}</td>
-                      <td className="border border-black p-2">
+                      <td className="border border-black p-2 text-center" style={{ wordBreak: 'break-word' }}>{index + 1}</td>
+                      <td className="border border-black p-2" style={{ wordBreak: 'break-word' }}>
                         <div className="font-medium">{product.name || item.productId}</div>
                         {product.sku && <div className="text-gray-500">SKU: {product.sku}</div>}
                       </td>
-                      <td className="border border-black p-2 text-center">{product.hsnCode || '-'}</td>
-                      <td className="border border-black p-2 text-center">-</td>
-                      <td className="border border-black p-2 text-center">-</td>
-                      <td className="border border-black p-2 text-center">{item.quantity}</td>
-                      <td className="border border-black p-2 text-right">{formatCurrency(Number(product.mrp || item.unitPrice || 0))}</td>
-                      <td className="border border-black p-2 text-right">{formatCurrency(Number(item.unitPrice || 0))}</td>
-                      <td className="border border-black p-2 text-right">{formatCurrency(sgst)}</td>
-                      <td className="border border-black p-2 text-right">{formatCurrency(cgst)}</td>
-                      <td className="border border-black p-2 text-right font-medium">{formatCurrency(total)}</td>
+                      <td className="border border-black p-2 text-center" style={{ wordBreak: 'break-word' }}>{product.hsnCode || '-'}</td>
+                      <td className="border border-black p-2 text-center" style={{ wordBreak: 'break-word' }}>-</td>
+                      <td className="border border-black p-2 text-center" style={{ wordBreak: 'break-word' }}>-</td>
+                      <td className="border border-black p-2 text-center" style={{ wordBreak: 'break-word' }}>{item.quantity}</td>
+                      <td className="border border-black p-2 text-right" style={{ wordBreak: 'break-word' }}>{formatCurrency(Number(product.mrp || item.unitPrice || 0))}</td>
+                      <td className="border border-black p-2 text-right" style={{ wordBreak: 'break-word' }}>{formatCurrency(Number(item.unitPrice || 0))}</td>
+                      <td className="border border-black p-2 text-right" style={{ wordBreak: 'break-word' }}>{formatCurrency(sgst)}</td>
+                      <td className="border border-black p-2 text-right" style={{ wordBreak: 'break-word' }}>{formatCurrency(cgst)}</td>
+                      <td className="border border-black p-2 text-right font-medium" style={{ wordBreak: 'break-word' }}>{formatCurrency(total)}</td>
                     </tr>
                   )
                 })}

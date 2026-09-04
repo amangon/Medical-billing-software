@@ -92,6 +92,22 @@ function measureTextLines(doc, text, width, fontSize, fontName) {
     if (testWidth > width && currentLine) {
       lines.push(currentLine)
       currentLine = word
+      if (doc.widthOfString(currentLine) > width) {
+        const charLines = []
+        let chars = ''
+        for (const char of currentLine) {
+          const testChars = chars + char
+          if (doc.widthOfString(testChars) > width && chars) {
+            charLines.push(chars)
+            chars = char
+          } else {
+            chars = testChars
+          }
+        }
+        if (chars) charLines.push(chars)
+        lines.push(...charLines)
+        currentLine = ''
+      }
     } else {
       currentLine = testLine
     }
@@ -123,9 +139,12 @@ function drawCell(doc, x, y, w, h, text, opts = {}) {
     doc.font(fontName).fontSize(fontSize)
     const textWidth = w - padding * 2
     const lines = measureTextLines(doc, String(text), textWidth, fontSize, fontName)
-    const lineHeight = fontSize * 0.35
+    const lineHeight = fontSize * 0.4
     const textBlockHeight = lines.length * lineHeight
-    let textY = y + (h - textBlockHeight) / 2 + lineHeight * 0.8
+    let textY = y + padding
+    if (h > textBlockHeight) {
+      textY = y + (h - textBlockHeight) / 2
+    }
     for (const line of lines) {
       let textX = x + padding
       if (align === 'right') {
@@ -189,8 +208,11 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
 
   companyInfoLines.forEach((line) => {
     doc.font('Helvetica').fontSize(9)
-    doc.text(line, headerX + headerBorderPadding, headerContentY, { width: LEFT_COL_W - MM(8), lineBreak: false })
-    headerContentY += MM(5)
+    const lines = measureTextLines(doc, line, LEFT_COL_W - MM(8), 9, 'Helvetica')
+    lines.forEach((l) => {
+      doc.text(l, headerX + headerBorderPadding, headerContentY)
+      headerContentY += MM(5)
+    })
   })
 
   if (b.logo) {
@@ -259,14 +281,20 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
   let billY = sectionLabelY + MM(6)
   doc.font('Helvetica').fontSize(9)
   billToLines.forEach((line) => {
-    doc.text(line, headerX, billY, { width: sectionW - MM(4), lineBreak: false })
-    billY += MM(5)
+    const lines = measureTextLines(doc, line, sectionW - MM(4), 9, 'Helvetica')
+    lines.forEach((l) => {
+      doc.text(l, headerX, billY)
+      billY += MM(5)
+    })
   })
 
   let shipY = sectionLabelY + MM(6)
   shipToLines.forEach((line) => {
-    doc.text(line, headerX + sectionW + MM(6), shipY, { width: sectionW - MM(4), lineBreak: false })
-    shipY += MM(5)
+    const lines = measureTextLines(doc, line, sectionW - MM(4), 9, 'Helvetica')
+    lines.forEach((l) => {
+      doc.text(l, headerX + sectionW + MM(6), shipY)
+      shipY += MM(5)
+    })
   })
 
   const customerBottomY = Math.max(billY, shipY) + MM(4)
@@ -282,23 +310,23 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
   y = addPageIfNeeded(doc, y, MM(60))
 
   const colDefs = [
-    { key: 'sl', label: 'S.NO.', width: MM(10) },
-    { key: 'item', label: 'ITEMS', width: MM(42) },
-    { key: 'hsn', label: 'HSN', width: MM(14) },
-    { key: 'batch', label: 'BATCH NO.', width: MM(18) },
-    { key: 'expiry', label: 'EXP. DATE', width: MM(16) },
-    { key: 'qty', label: 'QTY.', width: MM(12) },
-    { key: 'mrp', label: 'MRP', width: MM(14) },
+    { key: 'sl', label: 'S.NO.', width: MM(8) },
+    { key: 'item', label: 'ITEMS', width: MM(48) },
+    { key: 'hsn', label: 'HSN', width: MM(13) },
+    { key: 'batch', label: 'BATCH NO.', width: MM(16) },
+    { key: 'expiry', label: 'EXP. DATE', width: MM(14) },
+    { key: 'qty', label: 'QTY.', width: MM(10) },
+    { key: 'mrp', label: 'MRP', width: MM(13) },
     { key: 'rate', label: 'RATE', width: MM(16) },
-    { key: 'sgst', label: 'SGST', width: MM(14) },
-    { key: 'cgst', label: 'CGST', width: MM(14) },
-    { key: 'amount', label: 'AMOUNT', width: MM(20) },
+    { key: 'sgst', label: 'SGST', width: MM(13) },
+    { key: 'cgst', label: 'CGST', width: MM(13) },
+    { key: 'amount', label: 'AMOUNT', width: MM(16) },
   ]
   const tableX = PAGE_MARGIN
   const headerRowHeight = MM(10)
   const bodyRowPadding = MM(3)
   const bodyLineHeight = MM(4)
-  const minBodyRowHeight = MM(8)
+  const minBodyRowHeight = MM(10)
 
   let currentX = tableX
   doc.font('Helvetica-Bold').fontSize(8)
@@ -359,7 +387,14 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
       formatCurrency(total),
     ]
 
-    const rowHeight = MM(10)
+    let maxLines = 1
+    rowData.forEach((text, i) => {
+      const colW = colDefs[i].width - bodyRowPadding * 2
+      const lines = measureTextLines(doc, String(text), colW, 8, 'Helvetica')
+      maxLines = Math.max(maxLines, lines.length)
+    })
+
+    const rowHeight = Math.max(minBodyRowHeight, maxLines * bodyLineHeight + bodyRowPadding * 2)
     const rowY = y
     const rowBgColor = idx % 2 === 0 ? COLORS.white : '#f5f5f5'
 
@@ -418,21 +453,40 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
   y = addPageIfNeeded(doc, y, MM(50))
   const paySectionW = CONTENT_WIDTH * 0.6
   const payX = PAGE_MARGIN
+  const payTextWidth = paySectionW - MM(8)
+  const payTextStartX = payX + MM(4)
 
-  doc.rect(payX, y, paySectionW, MM(36))
+  doc.font('Helvetica-Bold').fontSize(9)
+  doc.text('Payment', payTextStartX, y + MM(4))
+  doc.font('Helvetica').fontSize(9)
+
+  const receivedLine = `Received Amount: ${formatCurrency(paidAmount)}`
+  const receivedLines = measureTextLines(doc, receivedLine, payTextWidth, 9, 'Helvetica')
+  receivedLines.forEach((line, i) => {
+    doc.text(line, payTextStartX, y + MM(10) + i * MM(5))
+  })
+
+  const methodLine = 'Payment Method: PhonePe / Google Pay / PayTM / UPI'
+  const methodLines = measureTextLines(doc, methodLine, payTextWidth, 9, 'Helvetica')
+  methodLines.forEach((line, i) => {
+    doc.text(line, payTextStartX, y + MM(16) + i * MM(5))
+  })
+
+  let payBottomY = y + MM(22)
+  if (b.upiId) {
+    const upiLine = `UPI ID: ${b.upiId}`
+    const upiLines = measureTextLines(doc, upiLine, payTextWidth, 9, 'Helvetica')
+    upiLines.forEach((line, i) => {
+      doc.text(line, payTextStartX, y + MM(22) + i * MM(5))
+    })
+    payBottomY = y + MM(22) + upiLines.length * MM(5) + MM(2)
+  }
+
+  const payBoxHeight = Math.max(MM(36), payBottomY - y + MM(4))
+  doc.rect(payX, y, paySectionW, payBoxHeight)
   doc.strokeColor(COLORS.border)
   doc.lineWidth(0.5)
   doc.stroke()
-
-  doc.font('Helvetica-Bold').fontSize(9)
-  doc.text('Payment', payX + MM(4), y + MM(4))
-  doc.font('Helvetica').fontSize(9)
-  doc.text(`Received Amount: ${formatCurrency(paidAmount)}`, payX + MM(4), y + MM(10))
-  doc.text('Payment Method: PhonePe / Google Pay / PayTM / UPI', payX + MM(4), y + MM(16))
-
-  if (b.upiId) {
-    doc.text(`UPI ID: ${b.upiId}`, payX + MM(4), y + MM(22))
-  }
 
   if (b.upiId) {
     try {
@@ -442,19 +496,23 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
     } catch {}
   }
 
-  y += MM(44)
+  y += payBoxHeight + MM(8)
 
   // ===== SIGNATURE =====
   y = addPageIfNeeded(doc, y, MM(30))
   const sigX = RIGHT_EDGE - MM(70)
+  const sigWidth = MM(70)
   doc.font('Helvetica-Bold').fontSize(9)
-  doc.text('Authorized Signatory', sigX, y, { width: MM(70), align: 'right' })
+  doc.text('Authorized Signatory', sigX, y, { width: sigWidth, align: 'right' })
   doc.font('Helvetica').fontSize(9)
-  doc.text(safeText(b.name), sigX, y + MM(5), { width: MM(70), align: 'right' })
+  const nameLines = measureTextLines(doc, safeText(b.name), sigWidth, 9, 'Helvetica')
+  nameLines.forEach((line, i) => {
+    doc.text(line, sigX, y + MM(5) + i * MM(5), { width: sigWidth, align: 'right' })
+  })
 
   if (b.signature) {
     try {
-      doc.image(b.signature, sigX, y + MM(10), { width: MM(60), height: MM(18), fit: [MM(60), MM(18)] })
+      doc.image(b.signature, sigX, y + MM(10) + nameLines.length * MM(5), { width: MM(60), height: MM(18), fit: [MM(60), MM(18)] })
     } catch {}
   }
 
