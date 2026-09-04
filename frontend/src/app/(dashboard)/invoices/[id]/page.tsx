@@ -1,7 +1,7 @@
 'use client'
 
 import { useParams, useRouter } from 'next/navigation'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -37,7 +37,7 @@ import { QRCodeSVG } from 'qrcode.react'
 import { motion } from 'framer-motion'
 import { api } from '@/lib/api'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { generateInvoicePDFFromElement } from '@/lib/pdfGenerator'
+import { InvoiceDocument } from '@/components/invoices/invoice-document'
 
 const PAYMENT_STATUSES: Record<string, { label: string; color: string; bg: string; icon: any }> = {
   PAID: {
@@ -78,7 +78,6 @@ export default function InvoiceDetailPage() {
   const [shareMethod, setShareMethod] = useState<'email' | 'whatsapp'>('email')
   const [shareValue, setShareValue] = useState<string>('')
   const [isSharing, setIsSharing] = useState(false)
-  const invoiceRef = useRef<HTMLDivElement>(null)
 
   const duplicateInvoice = useMutation({
     mutationFn: async (data: any) => {
@@ -125,12 +124,16 @@ export default function InvoiceDetailPage() {
   }, [id])
 
   const handlePrint = async () => {
-    if (!invoiceRef.current) {
-      toast.error('Invoice not loaded yet')
-      return
-    }
+    if (!invoice) return
     try {
-      const pdfBlob = await generateInvoicePDFFromElement(invoiceRef.current, invoice.invoiceNumber)
+      const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null
+      const res = await fetch(`/api/invoices/${id}/pdf`, {
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      })
+      if (!res.ok) throw new Error('Failed to generate PDF')
+      const pdfBlob = await res.blob()
       const url = window.URL.createObjectURL(pdfBlob)
       const a = document.createElement('a')
       a.href = url
@@ -145,12 +148,16 @@ export default function InvoiceDetailPage() {
   }
 
   const handleDownloadPDF = async () => {
-    if (!invoiceRef.current) {
-      toast.error('Invoice not loaded yet')
-      return
-    }
+    if (!invoice) return
     try {
-      const pdfBlob = await generateInvoicePDFFromElement(invoiceRef.current, invoice.invoiceNumber)
+      const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null
+      const res = await fetch(`/api/invoices/${id}/pdf`, {
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      })
+      if (!res.ok) throw new Error('Failed to download PDF')
+      const pdfBlob = await res.blob()
       const url = window.URL.createObjectURL(pdfBlob)
       const a = document.createElement('a')
       a.href = url
@@ -174,12 +181,19 @@ export default function InvoiceDetailPage() {
     try {
       let pdfBase64: string | undefined
       if (shareMethod === 'email') {
-        if (!invoiceRef.current) {
+        if (!invoice) {
           toast.error('Invoice not loaded yet')
           setIsSharing(false)
           return
         }
-        const pdfBlob = await generateInvoicePDFFromElement(invoiceRef.current, invoice.invoiceNumber)
+        const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null
+        const pdfRes = await fetch(`/api/invoices/${id}/pdf`, {
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        })
+        if (!pdfRes.ok) throw new Error('Failed to generate PDF')
+        const pdfBlob = await pdfRes.blob()
         pdfBase64 = await new Promise<string>((resolve, reject) => {
           const reader = new FileReader()
           reader.onloadend = () => resolve((reader.result as string).split(',')[1])
@@ -299,6 +313,10 @@ export default function InvoiceDetailPage() {
     <div className="space-y-6">
       <style>{`
         @media print {
+          @page {
+            size: A4 portrait;
+            margin: 8mm;
+          }
           body * {
             visibility: hidden;
           }
@@ -309,39 +327,17 @@ export default function InvoiceDetailPage() {
             position: absolute;
             left: 0;
             top: 0;
-            width: 100%;
+            width: 194mm;
+            min-height: 279mm;
             padding: 0;
             margin: 0;
             background: white;
+            box-shadow: none !important;
+            border: none !important;
+            border-radius: 0 !important;
           }
           .no-print {
             display: none !important;
-          }
-          .print-break-inside-avoid {
-            break-inside: avoid;
-          }
-          .print-break-after {
-            break-after: page;
-          }
-          @page {
-            size: A4;
-            margin: 15mm;
-          }
-        }
-        @media print and (max-width: 80mm) {
-          @page {
-            size: 80mm auto;
-            margin: 5mm;
-          }
-          .invoice-paper {
-            width: 80mm !important;
-            min-width: 80mm !important;
-            padding: 8mm !important;
-          }
-          .invoice-table th,
-          .invoice-table td {
-            padding: 4px 6px !important;
-            font-size: 10px !important;
           }
         }
       `}</style>
@@ -404,368 +400,11 @@ export default function InvoiceDetailPage() {
       {/* Invoice Paper */}
       <motion.div
         id="invoice-print-area"
-        ref={invoiceRef}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="invoice-paper bg-white rounded-2xl shadow-float border border-border/60 overflow-hidden"
       >
-        {/* Header */}
-        <div className="print-break-inside-avoid border-b border-border/60 bg-gradient-to-r from-white to-secondary/30">
-          <div className="p-6 md:p-8">
-            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-              {/* Company Info */}
-              <div className="flex items-start gap-4">
-                {business?.logo && (
-                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-border/60">
-                    <Image src={business.logo} alt={business.name} fill className="object-contain p-1" />
-                  </div>
-                )}
-                <div className="space-y-1">
-                  <h2 className="text-xl font-bold text-foreground">{business?.name || 'Business Name'}</h2>
-                  <p className="text-sm text-muted-foreground max-w-sm">
-                    {[business?.address, business?.city, business?.state, business?.pincode]
-                      .filter(Boolean)
-                      .join(', ') || 'Address not set'}
-                  </p>
-                  <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
-                    {business?.phone && <span>{business.phone}</span>}
-                    {business?.email && <span>{business.email}</span>}
-                  </div>
-                  <div className="flex flex-wrap items-center gap-3 text-sm">
-                    {business?.gstin && (
-                      <span className="inline-flex items-center rounded-md bg-secondary px-2 py-0.5 font-mono text-xs font-medium">
-                        GSTIN: {business.gstin}
-                      </span>
-                    )}
-                    {business?.pan && (
-                      <span className="inline-flex items-center rounded-md bg-secondary px-2 py-0.5 font-mono text-xs font-medium">
-                        PAN: {business.pan}
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Invoice Meta */}
-              <div className="md:text-right space-y-2">
-                <div className="inline-flex items-center gap-2 rounded-full bg-primary/5 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
-                  {invoice.invoiceType === 'TAX' ? 'Tax Invoice' : invoice.invoiceType === 'NON_TAX' ? 'Non-Tax Invoice' : 'Proforma Invoice'}
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-1 gap-x-8 gap-y-2 text-sm">
-                  <div className="flex md:justify-between md:gap-4">
-                    <span className="text-muted-foreground">Invoice #</span>
-                    <span className="font-semibold">{invoice.invoiceNumber}</span>
-                  </div>
-                  {invoice.purchaseOrderNumber && (
-                    <div className="flex md:justify-between md:gap-4">
-                      <span className="text-muted-foreground">Order #</span>
-                      <span className="font-semibold">{invoice.purchaseOrderNumber}</span>
-                    </div>
-                  )}
-                  <div className="flex md:justify-between md:gap-4">
-                    <span className="text-muted-foreground">Date</span>
-                    <span className="font-semibold">{formatDate(invoice.invoiceDate)}</span>
-                  </div>
-                  {invoice.dueDate && (
-                    <div className="flex md:justify-between md:gap-4">
-                      <span className="text-muted-foreground">Due Date</span>
-                      <span className="font-semibold">{formatDate(invoice.dueDate)}</span>
-                    </div>
-                  )}
-                  <div className="flex md:justify-between md:gap-4 items-center">
-                    <span className="text-muted-foreground">Status</span>
-                    <span
-                      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusConfig.bg} ${statusConfig.color}`}
-                    >
-                      <StatusIcon className="h-3.5 w-3.5" />
-                      {statusConfig.label}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Customer Section */}
-        <div className="print-break-inside-avoid border-b border-border/60 p-6 md:p-8">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">Customer Details</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Bill To */}
-            <Card className="border-border/60 bg-secondary/20">
-              <CardContent className="p-4 space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Bill To</p>
-                <div className="space-y-1">
-                  <p className="font-semibold text-foreground">{invoice.customer?.name || 'Walk-in Customer'}</p>
-                  {invoice.customer?.phone && (
-                    <p className="text-sm text-muted-foreground">{invoice.customer.phone}</p>
-                  )}
-                  {invoice.customer?.email && (
-                    <p className="text-sm text-muted-foreground">{invoice.customer.email}</p>
-                  )}
-                  {invoice.customer?.gstin && (
-                    <p className="text-sm font-mono text-muted-foreground">GSTIN: {invoice.customer.gstin}</p>
-                  )}
-                  {!invoice.customer?.name && (
-                    <p className="text-sm text-muted-foreground italic">No customer details available</p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Billing Address */}
-            <Card className="border-border/60 bg-secondary/20">
-              <CardContent className="p-4 space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Billing Address</p>
-                <div className="space-y-1">
-                  <p className="text-sm text-foreground">
-                    {[invoice.customer?.address, invoice.customer?.city, invoice.customer?.state, invoice.customer?.pincode]
-                      .filter(Boolean)
-                      .join(', ') || 'Not specified'}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Shipping Address */}
-            <Card className="border-border/60 bg-secondary/20">
-              <CardContent className="p-4 space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Shipping Address</p>
-                <div className="space-y-1">
-                  {invoice.customer?.address ? (
-                    <>
-                      <p className="text-sm text-foreground">
-                        {[invoice.customer?.address, invoice.customer?.city, invoice.customer?.state, invoice.customer?.pincode]
-                          .filter(Boolean)
-                          .join(', ')}
-                      </p>
-                      <p className="text-xs text-muted-foreground">Same as billing address</p>
-                    </>
-                  ) : (
-                    <p className="text-sm text-muted-foreground">Same as billing address</p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {/* Items Table */}
-        <div className="print-break-inside-avoid border-b border-border/60 p-6 md:p-8">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">Items</h3>
-          <div className="overflow-x-auto">
-            <table className="invoice-table w-full text-sm">
-              <thead>
-                <tr className="border-b-2 border-border text-left">
-                  <th className="pb-3 pr-2 font-semibold text-muted-foreground uppercase text-xs tracking-wider">#</th>
-                  <th className="pb-3 pr-2 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Item</th>
-                  <th className="pb-3 pr-2 font-semibold text-muted-foreground uppercase text-xs tracking-wider">HSN/SAC</th>
-                  <th className="pb-3 pr-2 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Batch</th>
-                  <th className="pb-3 pr-2 font-semibold text-muted-foreground uppercase text-xs tracking-wider">Expiry</th>
-                  <th className="pb-3 pr-2 font-semibold text-muted-foreground uppercase text-xs tracking-wider text-center">Qty</th>
-                  <th className="pb-3 pr-2 font-semibold text-muted-foreground uppercase text-xs tracking-wider text-right">Rate</th>
-                  <th className="pb-3 pr-2 font-semibold text-muted-foreground uppercase text-xs tracking-wider text-right">Discount</th>
-                  <th className="pb-3 pr-2 font-semibold text-muted-foreground uppercase text-xs tracking-wider text-right">Taxable</th>
-                  <th className="pb-3 pr-2 font-semibold text-muted-foreground uppercase text-xs tracking-wider text-right">CGST</th>
-                  <th className="pb-3 pr-2 font-semibold text-muted-foreground uppercase text-xs tracking-wider text-right">SGST</th>
-                  <th className="pb-3 pr-2 font-semibold text-muted-foreground uppercase text-xs tracking-wider text-right">CESS</th>
-                  <th className="pb-3 pr-2 font-semibold text-muted-foreground uppercase text-xs tracking-wider text-right">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(invoice.items || []).map((item: any, index: number) => {
-                  const product = item.product || {}
-                  const itemTotal = Number(item.unitPrice) * Number(item.quantity)
-                  const discountVal = item.discountType === 'PERCENTAGE'
-                    ? (itemTotal * Number(item.discount)) / 100
-                    : Number(item.discount || 0)
-                  const taxable = itemTotal - discountVal
-                  const cgst = Number(item.cgstAmount || 0)
-                  const sgst = Number(item.sgstAmount || 0)
-                  const igst = Number(item.igstAmount || 0)
-                  const total = Number(item.totalAmount || itemTotal - discountVal + cgst + sgst + igst)
-
-                  return (
-                    <tr key={item.id || index} className="border-b border-border/50 last:border-0">
-                      <td className="py-3 pr-2 text-muted-foreground">{index + 1}</td>
-                      <td className="py-3 pr-2">
-                        <div>
-                          <p className="font-medium text-foreground">{product.name || item.productId}</p>
-                          {product.sku && <p className="text-xs text-muted-foreground">SKU: {product.sku}</p>}
-                        </div>
-                      </td>
-                      <td className="py-3 pr-2 font-mono text-xs text-muted-foreground">{product.hsnCode || '-'}</td>
-                      <td className="py-3 pr-2 text-xs text-muted-foreground">-</td>
-                      <td className="py-3 pr-2 text-xs text-muted-foreground">-</td>
-                      <td className="py-3 pr-2 text-center">{item.quantity}</td>
-                      <td className="py-3 pr-2 text-right">{formatCurrency(Number(item.unitPrice))}</td>
-                      <td className="py-3 pr-2 text-right">
-                        {Number(item.discount || 0) > 0
-                          ? `${item.discountType === 'PERCENTAGE' ? `${item.discount}%` : formatCurrency(discountVal)}`
-                          : '-'}
-                      </td>
-                      <td className="py-3 pr-2 text-right">{formatCurrency(taxable)}</td>
-                      <td className="py-3 pr-2 text-right">{formatCurrency(cgst)}</td>
-                      <td className="py-3 pr-2 text-right">{formatCurrency(sgst)}</td>
-                      <td className="py-3 pr-2 text-right">{formatCurrency(igst)}</td>
-                      <td className="py-3 pr-2 text-right font-medium">{formatCurrency(total)}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* Summary Section */}
-        <div className="print-break-inside-avoid border-b border-border/60 p-6 md:p-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Left: Calculations */}
-            <div className="space-y-3">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">Summary</h3>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Subtotal</span>
-                  <span className="font-medium">{formatCurrency(subtotal)}</span>
-                </div>
-                {discountAmount > 0 && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Discount</span>
-                    <span className="font-medium text-destructive">- {formatCurrency(discountAmount)}</span>
-                  </div>
-                )}
-                {cgstAmount > 0 && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">CGST</span>
-                    <span className="font-medium">{formatCurrency(cgstAmount)}</span>
-                  </div>
-                )}
-                {sgstAmount > 0 && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">SGST</span>
-                    <span className="font-medium">{formatCurrency(sgstAmount)}</span>
-                  </div>
-                )}
-                {igstAmount > 0 && (
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">IGST</span>
-                    <span className="font-medium">{formatCurrency(igstAmount)}</span>
-                  </div>
-                )}
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Round Off</span>
-                  <span className="font-medium">{formatCurrency(roundOff)}</span>
-                </div>
-                <div className="flex justify-between text-base font-bold pt-2 border-t border-border/60">
-                  <span>Grand Total</span>
-                  <span>{formatCurrency(grandTotal)}</span>
-                </div>
-                <div className="flex justify-between text-sm pt-2">
-                  <span className="text-muted-foreground">Amount Received</span>
-                  <span className="font-medium text-green-600">{formatCurrency(paidAmount)}</span>
-                </div>
-                <div className="flex justify-between text-sm font-bold pt-2 border-t border-border/60">
-                  <span>Balance Due</span>
-                  <span className={balanceAmount > 0 ? 'text-destructive' : 'text-green-600'}>
-                    {formatCurrency(balanceAmount)}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right: Amount in Words, QR, UPI, Payment */}
-            <div className="space-y-6">
-              {/* Amount in Words */}
-              <div>
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Amount in Words</h3>
-                <p className="text-sm font-medium text-foreground leading-relaxed p-3 bg-secondary/30 rounded-lg">
-                  {amountToWords(grandTotal)}
-                </p>
-              </div>
-
-              {/* Payment Method */}
-              {invoice.paymentMethod && (
-                <div>
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Payment Method</h3>
-                  <p className="text-sm font-medium text-foreground capitalize">{invoice.paymentMethod?.toLowerCase().replace('_', ' ')}</p>
-                </div>
-              )}
-
-              {/* QR Code & UPI */}
-              {upiLink && (
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-                  <div className="flex flex-col items-center">
-                    <QRCodeSVG
-                      value={upiLink}
-                      size={100}
-                      level="M"
-                      includeMargin={false}
-                      className="rounded-lg border border-border/60"
-                    />
-                    <p className="text-xs text-muted-foreground mt-2">Scan to Pay</p>
-                  </div>
-                  <div className="space-y-2 text-sm">
-                    <p className="font-semibold text-foreground">UPI Payment</p>
-                    <p className="text-muted-foreground">Scan QR code or use UPI ID</p>
-                    {business?.upiId && (
-                      <p className="font-mono text-xs bg-secondary/50 px-2 py-1 rounded inline-block">
-                        {business.upiId}
-                      </p>
-                    )}
-                    {business?.accountHolderName && (
-                      <p className="text-xs text-muted-foreground">
-                        {business.accountHolderName} | {business.bankName}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Footer: Terms, Signature, Stamp */}
-        <div className="print-break-inside-avoid p-6 md:p-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Terms & Conditions */}
-            <div className="md:col-span-2 space-y-2">
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Terms & Conditions</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                {invoice.termsConditions || business?.termsConditions || 'No terms and conditions specified for this invoice.'}
-              </p>
-              {invoice.notes && (
-                <div className="mt-3">
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">Notes</h4>
-                  <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">{invoice.notes}</p>
-                </div>
-              )}
-            </div>
-
-            {/* Signature & Stamp */}
-            <div className="flex flex-col items-end justify-end space-y-4">
-              {business?.signature && (
-                <div className="flex flex-col items-center gap-1">
-                  <div className="relative h-16 w-32">
-                    <Image src={business.signature} alt="Authorized Signature" fill className="object-contain" />
-                  </div>
-                  <span className="text-xs text-muted-foreground">Authorized Signature</span>
-                </div>
-              )}
-              <div className="text-center space-y-1">
-                <div className="h-12 w-24 border-2 border-dashed border-border/60 rounded-lg flex items-center justify-center">
-                  <span className="text-xs text-muted-foreground">Stamp</span>
-                </div>
-                <span className="text-xs text-muted-foreground">Company Stamp</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer Info */}
-          <div className="mt-8 pt-4 border-t border-border/60 flex flex-col md:flex-row md:items-center md:justify-between gap-2 text-xs text-muted-foreground">
-            <p>Generated on {formatDate(new Date().toISOString())}</p>
-            <p>This is a computer-generated invoice and does not require a physical signature.</p>
-          </div>
-        </div>
+        <InvoiceDocument invoice={invoice} business={business} />
       </motion.div>
     </div>
   )

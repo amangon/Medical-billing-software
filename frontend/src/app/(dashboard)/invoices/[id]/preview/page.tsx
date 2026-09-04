@@ -2,13 +2,11 @@
 
 import { useParams, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Printer, Download, ArrowLeft, Loader2 } from 'lucide-react'
-import { formatCurrency, formatDate, amountToWords } from '@/lib/utils'
-import { QRCodeSVG } from 'qrcode.react'
 import { api } from '@/lib/api'
 import { toast } from 'react-hot-toast'
+import { InvoiceDocument } from '@/components/invoices/invoice-document'
 
 export default function InvoicePreviewPage() {
   const { id } = useParams() as { id: string }
@@ -95,22 +93,6 @@ export default function InvoicePreviewPage() {
     )
   }
 
-  const customer = invoice.customer || {}
-  const items = invoice.items || []
-  const subtotal = Number(invoice.subTotal || 0)
-  const discountAmount = Number(invoice.discountAmount || 0)
-  const cgstAmount = Number(invoice.cgstAmount || 0)
-  const sgstAmount = Number(invoice.sgstAmount || 0)
-  const igstAmount = Number(invoice.igstAmount || 0)
-  const totalAmount = Number(invoice.totalAmount || 0)
-  const paidAmount = Number(invoice.paidAmount || 0)
-  const balanceAmount = Number(invoice.balanceAmount || 0)
-  const totalQty = items.reduce((sum: number, item: any) => sum + Math.trunc(Number(item.quantity) || 0), 0)
-
-  const upiLink =
-    business?.upiId &&
-    `upi://pay?pa=${encodeURIComponent(business.upiId)}&pn=${encodeURIComponent(business.name || '')}&am=${totalAmount}&cu=INR&tn=Invoice%20${invoice.invoiceNumber}`
-
   return (
     <div className="min-h-screen bg-gray-100">
       <style>{`
@@ -137,31 +119,6 @@ export default function InvoicePreviewPage() {
             box-shadow: none !important;
             border: none !important;
           }
-          #invoice-print-area table {
-            table-layout: fixed;
-            word-break: break-word;
-            overflow-wrap: break-word;
-            line-height: 1.3;
-          }
-          #invoice-print-area th,
-          #invoice-print-area td {
-            box-sizing: border-box;
-            overflow-wrap: break-word;
-            word-break: break-word;
-            white-space: normal;
-            line-height: 1.3;
-            vertical-align: top;
-          }
-          #invoice-print-area thead {
-            display: table-header-group;
-          }
-          #invoice-print-area tr {
-            break-inside: avoid;
-            page-break-inside: avoid;
-          }
-          #invoice-print-area tfoot {
-            display: table-footer-group;
-          }
           .no-print {
             display: none !important;
           }
@@ -177,7 +134,7 @@ export default function InvoicePreviewPage() {
             </Button>
             <div>
               <h1 className="text-lg font-semibold">Invoice #{invoice.invoiceNumber}</h1>
-              <p className="text-xs text-muted-foreground">{formatDate(invoice.invoiceDate)}</p>
+              <p className="text-xs text-muted-foreground">{invoice.invoiceDate ? new Date(invoice.invoiceDate).toLocaleDateString('en-IN') : ''}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -199,227 +156,8 @@ export default function InvoicePreviewPage() {
 
       {/* Invoice Paper */}
       <div className="flex justify-center py-8 px-4">
-        <div
-          id="invoice-print-area"
-          className="bg-white border border-gray-300"
-          style={{ width: '194mm', minHeight: '279mm', padding: '8mm' }}
-        >
-          {/* Header */}
-          <div className="border-b border-black pb-4 mb-4">
-            <div className="flex justify-between items-start">
-              <div className="flex items-start gap-4">
-                {business?.logo && (
-                  <div className="relative h-16 w-16 shrink-0">
-                    <Image src={business.logo} alt={business.name} fill className="object-contain" />
-                  </div>
-                )}
-                <div>
-                  <h2 className="text-lg font-bold">{business?.name || 'Business Name'}</h2>
-                  <p className="text-xs text-gray-600">
-                    {[business?.address, business?.city, business?.state, business?.pincode].filter(Boolean).join(', ')}
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    {business?.phone && <span>Mobile: {business.phone}</span>}
-                    {business?.phone && business?.email && <span> | </span>}
-                    {business?.email && <span>{business.email}</span>}
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    {business?.gstin && <span>GSTIN: {business.gstin}</span>}
-                  </p>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-xs font-semibold text-gray-500">Invoice No.</div>
-                <div className="text-sm font-bold">{invoice.invoiceNumber}</div>
-                <div className="text-xs font-semibold text-gray-500 mt-2">Invoice Date</div>
-                <div className="text-sm">{formatDate(invoice.invoiceDate)}</div>
-                <div className="text-xs font-semibold text-gray-500 mt-2">Due Date</div>
-                <div className="text-sm">{formatDate(invoice.dueDate)}</div>
-              </div>
-            </div>
-            <div className="mt-3 flex justify-between items-center">
-              <div>
-                <span className="text-sm font-bold">TAX INVOICE</span>
-              </div>
-              <div>
-                <span className="text-xs font-semibold">ORIGINAL FOR RECIPIENT</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Bill To / Ship To */}
-          <div className="grid grid-cols-2 gap-0 border border-black mb-4">
-            <div className="border-r border-black p-3">
-              <div className="text-xs font-bold mb-2">BILL TO</div>
-              <div className="text-xs space-y-1">
-                <div className="font-semibold">{customer.name || 'Walk-in Customer'}</div>
-                {customer.phone && <div>Mobile: {customer.phone}</div>}
-                {customer.email && <div>Email: {customer.email}</div>}
-                {customer.gstin && <div>GSTIN: {customer.gstin}</div>}
-                <div>
-                  {[customer.address, customer.city, customer.state, customer.pincode].filter(Boolean).join(', ') || '-'}
-                </div>
-              </div>
-            </div>
-            <div className="p-3">
-              <div className="text-xs font-bold mb-2">SHIP TO</div>
-              <div className="text-xs space-y-1">
-                <div className="font-semibold">{customer.name || 'Walk-in Customer'}</div>
-                <div>
-                  {[customer.address, customer.city, customer.state, customer.pincode].filter(Boolean).join(', ') || 'Same as billing address'}
-                </div>
-                {customer.gstin && <div>GSTIN: {customer.gstin}</div>}
-              </div>
-            </div>
-          </div>
-
-          {/* Items Table */}
-          <div className="border border-black mb-4">
-            <table className="w-full border-collapse text-xs" style={{ tableLayout: 'fixed' }}>
-              <colgroup>
-                <col style={{ width: '5%' }} />
-                <col style={{ width: '30%' }} />
-                <col style={{ width: '8%' }} />
-                <col style={{ width: '10%' }} />
-                <col style={{ width: '9%' }} />
-                <col style={{ width: '6%' }} />
-                <col style={{ width: '8%' }} />
-                <col style={{ width: '10%' }} />
-                <col style={{ width: '8%' }} />
-                <col style={{ width: '8%' }} />
-                <col style={{ width: '8%' }} />
-              </colgroup>
-              <thead>
-                <tr className="bg-black text-white">
-                  <th className="border border-black p-2 text-left font-bold">S.NO.</th>
-                  <th className="border border-black p-2 text-left font-bold">ITEMS</th>
-                  <th className="border border-black p-2 text-center font-bold">HSN</th>
-                  <th className="border border-black p-2 text-center font-bold">BATCH NO.</th>
-                  <th className="border border-black p-2 text-center font-bold">EXP. DATE</th>
-                  <th className="border border-black p-2 text-center font-bold">QTY.</th>
-                  <th className="border border-black p-2 text-right font-bold">MRP</th>
-                  <th className="border border-black p-2 text-right font-bold">RATE</th>
-                  <th className="border border-black p-2 text-right font-bold">SGST</th>
-                  <th className="border border-black p-2 text-right font-bold">CGST</th>
-                  <th className="border border-black p-2 text-right font-bold">AMOUNT</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item: any, index: number) => {
-                  const product = item.product || {}
-                  const itemTotal = Number(item.unitPrice || 0) * Number(item.quantity || 0)
-                  const discountVal = item.discountType === 'PERCENTAGE'
-                    ? (itemTotal * Number(item.discount || 0)) / 100
-                    : Number(item.discount || 0)
-                  const taxable = itemTotal - discountVal
-                  const cgst = Number(item.cgstAmount || 0)
-                  const sgst = Number(item.sgstAmount || 0)
-                  const total = Number(item.totalAmount || taxable + cgst + sgst)
-
-                  return (
-                    <tr key={item.id || index}>
-                      <td className="border border-black p-2 text-center" style={{ wordBreak: 'break-word' }}>{index + 1}</td>
-                      <td className="border border-black p-2" style={{ wordBreak: 'break-word' }}>
-                        <div className="font-medium">{product.name || item.productId}</div>
-                        {product.sku && <div className="text-gray-500">SKU: {product.sku}</div>}
-                      </td>
-                      <td className="border border-black p-2 text-center" style={{ wordBreak: 'break-word' }}>{product.hsnCode || '-'}</td>
-                      <td className="border border-black p-2 text-center" style={{ wordBreak: 'break-word' }}>-</td>
-                      <td className="border border-black p-2 text-center" style={{ wordBreak: 'break-word' }}>-</td>
-                      <td className="border border-black p-2 text-center" style={{ wordBreak: 'break-word' }}>{item.quantity}</td>
-                      <td className="border border-black p-2 text-right" style={{ wordBreak: 'break-word' }}>{formatCurrency(Number(product.mrp || item.unitPrice || 0))}</td>
-                      <td className="border border-black p-2 text-right" style={{ wordBreak: 'break-word' }}>{formatCurrency(Number(item.unitPrice || 0))}</td>
-                      <td className="border border-black p-2 text-right" style={{ wordBreak: 'break-word' }}>{formatCurrency(sgst)}</td>
-                      <td className="border border-black p-2 text-right" style={{ wordBreak: 'break-word' }}>{formatCurrency(cgst)}</td>
-                      <td className="border border-black p-2 text-right font-medium" style={{ wordBreak: 'break-word' }}>{formatCurrency(total)}</td>
-                    </tr>
-                  )
-                })}
-                <tr className="font-bold bg-gray-50">
-                  <td colSpan={5} className="border border-black p-2 text-right">TOTAL</td>
-                  <td className="border border-black p-2 text-center">{totalQty}</td>
-                  <td className="border border-black p-2"></td>
-                  <td className="border border-black p-2"></td>
-                  <td className="border border-black p-2 text-right">{formatCurrency(sgstAmount)}</td>
-                  <td className="border border-black p-2 text-right">{formatCurrency(cgstAmount)}</td>
-                  <td className="border border-black p-2 text-right">{formatCurrency(totalAmount)}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          {/* Summary */}
-          <div className="border border-black p-3 mb-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <div className="text-xs font-bold mb-2">Summary</div>
-                <div className="space-y-1 text-xs">
-                  <div className="flex justify-between"><span>Subtotal:</span><span>{formatCurrency(subtotal)}</span></div>
-                  {discountAmount > 0 && (
-                    <div className="flex justify-between"><span>Discount:</span><span>- {formatCurrency(discountAmount)}</span></div>
-                  )}
-                  <div className="flex justify-between"><span>CGST:</span><span>{formatCurrency(cgstAmount)}</span></div>
-                  <div className="flex justify-between"><span>SGST:</span><span>{formatCurrency(sgstAmount)}</span></div>
-                  {igstAmount > 0 && (
-                    <div className="flex justify-between"><span>IGST:</span><span>{formatCurrency(igstAmount)}</span></div>
-                  )}
-                  <div className="flex justify-between font-bold text-sm border-t border-black pt-1 mt-1">
-                    <span>Grand Total:</span><span>{formatCurrency(totalAmount)}</span>
-                  </div>
-                  <div className="flex justify-between"><span>Amount Received:</span><span>{formatCurrency(paidAmount)}</span></div>
-                  <div className="flex justify-between font-bold">
-                    <span>Balance Due:</span><span>{formatCurrency(balanceAmount)}</span>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <div className="text-xs font-bold mb-2">Amount in Words</div>
-                <div className="text-xs bg-gray-50 p-2 border border-gray-200 rounded">
-                  {amountToWords(totalAmount)}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Payment & QR */}
-          <div className="border border-black p-3 mb-4">
-            <div className="flex justify-between items-start">
-              <div>
-                <div className="text-xs font-bold mb-1">Payment Details</div>
-                <div className="text-xs">Received Amount: {formatCurrency(paidAmount)}</div>
-                <div className="text-xs">Payment Method: PhonePe / Google Pay / PayTM / UPI</div>
-                {business?.upiId && <div className="text-xs">UPI ID: {business.upiId}</div>}
-              </div>
-              {upiLink && (
-                <div className="flex flex-col items-center">
-                  <QRCodeSVG value={upiLink} size={80} level="M" includeMargin={false} />
-                  <span className="text-xs mt-1">Scan to Pay</span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Signature */}
-          <div className="flex justify-end mb-4">
-            <div className="text-right">
-              <div className="text-xs font-bold">Authorized Signatory</div>
-              <div className="text-xs">{business?.name}</div>
-              {business?.signature && (
-                <div className="relative h-12 w-24 mt-1 ml-auto">
-                  <Image src={business.signature} alt="Signature" fill className="object-contain" />
-                </div>
-              )}
-              {!business?.signature && (
-                <div className="h-12 w-24 border-b border-black mt-2"></div>
-              )}
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center text-xs text-gray-500 mt-8 pt-4 border-t border-gray-200">
-            <p>Thank you for your business!</p>
-            <p>Generated on {formatDate(new Date().toISOString())} | This is a computer-generated invoice</p>
-          </div>
+        <div className="bg-white border border-gray-300" style={{ boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+          <InvoiceDocument invoice={invoice} business={business} />
         </div>
       </div>
     </div>
