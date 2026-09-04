@@ -6,6 +6,7 @@ import {
   updateInvoice,
   deleteInvoice,
   updateInvoiceStatus,
+  downloadInvoicePdf,
   shareInvoice
 } from '../controllers/invoiceController.js';
 import { authenticate } from '../middleware/auth.js';
@@ -20,6 +21,7 @@ router.get('/:id', getInvoice);
 router.put('/:id', updateInvoice);
 router.delete('/:id', deleteInvoice);
 router.put('/:id/status', updateInvoiceStatus);
+router.get('/:id/pdf', downloadInvoicePdf);
 router.post('/:id/share', shareInvoice);
 
 export default router;

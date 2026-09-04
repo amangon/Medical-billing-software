@@ -8,6 +8,7 @@ import {
 } from '../services/invoiceService.js';
 import { ApiError } from '../middleware/errorHandler.js';
 import prisma from '../config/db.js';
+import { generateInvoicePDFFromHtml } from '../utils/invoicePdfGenerator.js';
 
 export const createInvoice = async (req, res, next) => {
   try {
@@ -126,6 +127,21 @@ export const updateInvoiceStatus = async (req, res, next) => {
       include: { customer: true },
     });
     res.json(invoice);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const downloadInvoicePdf = async (req, res, next) => {
+  try {
+    const invoice = await getInvoiceService(req.params.id, req.user.businessId);
+    if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
+    const { pdfBuffer } = await generateInvoicePDFFromHtml(invoice, invoice.business);
+    res.setHeader('Content-Type', 'application/pdf');
+    const filename = encodeURIComponent(invoice.invoiceNumber) + '.pdf';
+    res.setHeader('Content-Disposition', `attachment; filename*=UTF-8''${filename}`);
+    res.setHeader('Content-Length', Buffer.byteLength(pdfBuffer));
+    res.send(pdfBuffer);
   } catch (error) {
     next(error);
   }

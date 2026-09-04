@@ -2,6 +2,7 @@ import prisma from '../config/db.js';
 import { generateNumber } from '../utils/generateNumber.js';
 import { buildSearchFilter, dateRangeFilter } from '../utils/helpers.js';
 import { generateUPIQR } from '../utils/qrGenerator.js';
+import { generateInvoicePDFFromHtml } from '../utils/invoicePdfGenerator.js';
 import { ApiError } from '../middleware/errorHandler.js';
 
 const WALK_IN_CUSTOMER_NAME = 'Walk-in Customer';
@@ -564,7 +565,8 @@ export async function shareViaEmail(id, businessId, email, pdfBase64) {
     if (pdfBase64) {
       pdfBuffer = Buffer.from(pdfBase64, 'base64')
     } else {
-      throw new Error('PDF attachment is required for email sharing');
+      const result = await generateInvoicePDFFromHtml(invoice, invoice.business)
+      pdfBuffer = result.pdfBuffer
     }
     
     const { sendInvoiceEmail } = await import('../utils/email.js');

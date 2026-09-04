@@ -123,14 +123,52 @@ export default function InvoiceDetailPage() {
     }
   }, [id])
 
-  const handlePrint = () => {
+  const handlePrint = async () => {
     if (!invoice) return
-    window.print()
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null
+      const res = await fetch(`/api/invoices/${id}/pdf`, {
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      })
+      if (!res.ok) throw new Error('Failed to generate PDF')
+      const pdfBlob = await res.blob()
+      const url = window.URL.createObjectURL(pdfBlob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${invoice.invoiceNumber}.pdf`
+      a.click()
+      window.URL.revokeObjectURL(url)
+      toast.success('PDF generated successfully')
+    } catch (error) {
+      console.error('Failed to generate PDF:', error)
+      toast.error('Failed to generate PDF')
+    }
   }
 
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
     if (!invoice) return
-    window.print()
+    try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null
+      const res = await fetch(`/api/invoices/${id}/pdf`, {
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      })
+      if (!res.ok) throw new Error('Failed to download PDF')
+      const pdfBlob = await res.blob()
+      const url = window.URL.createObjectURL(pdfBlob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${invoice.invoiceNumber}.pdf`
+      a.click()
+      window.URL.revokeObjectURL(url)
+      toast.success('PDF downloaded successfully')
+    } catch (error) {
+      console.error('Failed to download PDF:', error)
+      toast.error('Failed to download PDF')
+    }
   }
 
   const handleShare = async () => {
@@ -141,6 +179,29 @@ export default function InvoiceDetailPage() {
 
     setIsSharing(true)
     try {
+      let pdfBase64: string | undefined
+      if (shareMethod === 'email') {
+        if (!invoice) {
+          toast.error('Invoice not loaded yet')
+          setIsSharing(false)
+          return
+        }
+        const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null
+        const pdfRes = await fetch(`/api/invoices/${id}/pdf`, {
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        })
+        if (!pdfRes.ok) throw new Error('Failed to generate PDF')
+        const pdfBlob = await pdfRes.blob()
+        pdfBase64 = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onloadend = () => resolve((reader.result as string).split(',')[1])
+          reader.onerror = reject
+          reader.readAsDataURL(pdfBlob)
+        })
+      }
+
       const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null
       const res = await fetch(`/api/invoices/${id}/share`, {
         method: 'POST',
@@ -152,6 +213,7 @@ export default function InvoiceDetailPage() {
           method: shareMethod,
           email: shareMethod === 'email' ? shareValue : undefined,
           phoneNumber: shareMethod === 'whatsapp' ? shareValue : undefined,
+          ...(pdfBase64 ? { pdfBase64 } : {}),
         }),
       })
       if (!res.ok) {
