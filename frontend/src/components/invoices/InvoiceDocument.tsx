@@ -66,6 +66,85 @@ type Invoice = {
   business?: Business
 }
 
+const TABLE_COLUMNS = [
+  { label: 'S.No.', width: '8mm' },
+  { label: 'ITEMS', width: '42mm' },
+  { label: 'HSN', width: '13mm' },
+  { label: 'BATCH', width: '16mm' },
+  { label: 'EXP.', width: '16mm' },
+  { label: 'QTY', width: '10mm' },
+  { label: 'MRP', width: '14mm' },
+  { label: 'RATE', width: '14mm' },
+  { label: 'SGST', width: '14mm' },
+  { label: 'CGST', width: '14mm' },
+  { label: 'AMOUNT', width: '19mm' },
+]
+
+const TABLE_WIDTH = TABLE_COLUMNS.reduce((sum, col) => sum + parseFloat(col.width), 0)
+
+function Wrapper({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      style={{
+        width: '210mm',
+        minHeight: '297mm',
+        padding: '8mm',
+        boxSizing: 'border-box',
+        fontFamily: 'Arial, Helvetica, sans-serif',
+        color: '#000',
+        fontSize: '10pt',
+        lineHeight: 1.35,
+        background: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      {children}
+    </div>
+  )
+}
+
+const headerStyle: React.CSSProperties = {
+  borderBottom: '1px solid #000',
+  paddingBottom: '4mm',
+  marginBottom: '4mm',
+}
+
+const labelStyle: React.CSSProperties = {
+  fontSize: '9pt',
+  fontWeight: 600,
+  color: '#555',
+}
+
+const valueStyle: React.CSSProperties = {
+  fontSize: '10pt',
+  fontWeight: 'bold',
+}
+
+const thBaseStyle: React.CSSProperties = {
+  border: '1px solid #000',
+  padding: '2mm',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  verticalAlign: 'middle',
+  whiteSpace: 'nowrap',
+  wordBreak: 'normal',
+  overflowWrap: 'normal',
+  lineHeight: 1.3,
+  fontSize: '9pt',
+}
+
+const tdBaseStyle: React.CSSProperties = {
+  border: '1px solid #000',
+  padding: '2mm',
+  verticalAlign: 'top',
+  wordBreak: 'break-word',
+  overflowWrap: 'break-word',
+  whiteSpace: 'normal',
+  lineHeight: 1.3,
+  fontSize: '9pt',
+}
+
 export function InvoiceDocument({ invoice, business }: { invoice: Invoice; business?: Business }) {
   const b = business || invoice?.business || {}
   const items = invoice?.items || []
@@ -86,35 +165,17 @@ export function InvoiceDocument({ invoice, business }: { invoice: Invoice; busin
     `upi://pay?pa=${encodeURIComponent(b.upiId)}&pn=${encodeURIComponent(b.name || '')}&am=${totalAmount}&cu=INR&tn=Invoice%20${invoice.invoiceNumber}`
 
   return (
-    <div
-      style={{
-        width: '210mm',
-        minHeight: '297mm',
-        padding: '8mm',
-        boxSizing: 'border-box',
-        fontFamily: 'Arial, Helvetica, sans-serif',
-        color: '#000',
-        fontSize: '10pt',
-        lineHeight: 1.35,
-        background: '#fff',
-      }}
-    >
+    <Wrapper>
       {/* Header */}
-      <div
-        style={{
-          borderBottom: '1px solid #000',
-          paddingBottom: '5mm',
-          marginBottom: '4mm',
-        }}
-      >
+      <div style={headerStyle}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '4mm' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '3mm', flex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '3mm', flex: 1, minWidth: 0 }}>
             {b?.logo && (
               <div style={{ width: '14mm', height: '14mm', position: 'relative', flexShrink: 0 }}>
                 <Image src={b.logo} alt={b.name || 'Logo'} fill style={{ objectFit: 'contain' }} />
               </div>
             )}
-            <div>
+            <div style={{ minWidth: 0 }}>
               <div style={{ fontWeight: 'bold', fontSize: '11pt' }}>{b?.name || 'Business Name'}</div>
               <div style={{ fontSize: '9pt', color: '#333', marginTop: '0.5mm' }}>
                 {[b?.address, b?.city, b?.state, b?.pincode].filter(Boolean).join(', ') || '-'}
@@ -130,12 +191,12 @@ export function InvoiceDocument({ invoice, business }: { invoice: Invoice; busin
             </div>
           </div>
           <div style={{ textAlign: 'right', flexShrink: 0 }}>
-            <div style={{ fontSize: '9pt', fontWeight: 600, color: '#555' }}>Invoice No.</div>
-            <div style={{ fontSize: '10pt', fontWeight: 'bold' }}>{invoice?.invoiceNumber || '-'}</div>
-            <div style={{ fontSize: '9pt', fontWeight: 600, color: '#555', marginTop: '2mm' }}>Invoice Date</div>
-            <div style={{ fontSize: '10pt' }}>{invoice?.invoiceDate ? formatDate(invoice.invoiceDate) : '-'}</div>
-            <div style={{ fontSize: '9pt', fontWeight: 600, color: '#555', marginTop: '2mm' }}>Due Date</div>
-            <div style={{ fontSize: '10pt' }}>{invoice?.dueDate ? formatDate(invoice.dueDate) : '-'}</div>
+            <div style={{ ...labelStyle, textAlign: 'right' }}>Invoice No.</div>
+            <div style={{ ...valueStyle, textAlign: 'right' }}>{invoice?.invoiceNumber || '-'}</div>
+            <div style={{ ...labelStyle, textAlign: 'right', marginTop: '2mm' }}>Invoice Date</div>
+            <div style={{ ...valueStyle, textAlign: 'right' }}>{invoice?.invoiceDate ? formatDate(invoice.invoiceDate) : '-'}</div>
+            <div style={{ ...labelStyle, textAlign: 'right', marginTop: '2mm' }}>Due Date</div>
+            <div style={{ ...valueStyle, textAlign: 'right' }}>{invoice?.dueDate ? formatDate(invoice.dueDate) : '-'}</div>
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '3mm' }}>
@@ -182,41 +243,26 @@ export function InvoiceDocument({ invoice, business }: { invoice: Invoice; busin
       </div>
 
       {/* Items Table */}
-      <div style={{ border: '1px solid #000', marginBottom: '4mm' }}>
+      <div style={{ border: '1px solid #000', marginBottom: '4mm', flex: '1 1 auto', minHeight: '60mm', display: 'flex', flexDirection: 'column' }}>
         <table
           style={{
             width: '100%',
             borderCollapse: 'collapse',
             tableLayout: 'fixed',
             fontSize: '9pt',
+            flex: '1 1 auto',
           }}
         >
           <colgroup>
-            <col style={{ width: '5%' }} />
-            <col style={{ width: '34%' }} />
-            <col style={{ width: '8%' }} />
-            <col style={{ width: '10%' }} />
-            <col style={{ width: '9%' }} />
-            <col style={{ width: '6%' }} />
-            <col style={{ width: '8%' }} />
-            <col style={{ width: '10%' }} />
-            <col style={{ width: '5%' }} />
-            <col style={{ width: '5%' }} />
-            <col style={{ width: '10%' }} />
+            {TABLE_COLUMNS.map((col) => (
+              <col key={col.label} style={{ width: col.width }} />
+            ))}
           </colgroup>
           <thead>
-            <tr style={{ backgroundColor: '#000', color: '#fff' }}>
-              <th style={thStyle}>S.NO.</th>
-              <th style={thStyle}>ITEMS</th>
-              <th style={thStyle}>HSN</th>
-              <th style={thStyle}>BATCH NO.</th>
-              <th style={thStyle}>EXP. DATE</th>
-              <th style={thStyle}>QTY.</th>
-              <th style={thStyle}>MRP</th>
-              <th style={thStyle}>RATE</th>
-              <th style={thStyle}>SGST</th>
-              <th style={thStyle}>CGST</th>
-              <th style={thStyle}>AMOUNT</th>
+            <tr style={{ backgroundColor: '#fff', color: '#000' }}>
+              {TABLE_COLUMNS.map((col) => (
+                <th key={col.label} style={thBaseStyle}>{col.label}</th>
+              ))}
             </tr>
           </thead>
           <tbody>
@@ -233,31 +279,31 @@ export function InvoiceDocument({ invoice, business }: { invoice: Invoice; busin
 
               return (
                 <tr key={item?.id || index}>
-                  <td style={tdCenterStyle}>{index + 1}</td>
-                  <td style={tdLeftStyle}>
+                  <td style={{ ...tdBaseStyle, textAlign: 'center', whiteSpace: 'nowrap' }}>{index + 1}</td>
+                  <td style={tdBaseStyle}>
                     <div style={{ fontWeight: 500 }}>{product?.name || item?.productId || '-'}</div>
                     {product?.sku && <div style={{ color: '#666', fontSize: '8pt' }}>SKU: {product.sku}</div>}
                   </td>
-                  <td style={tdCenterStyle}>{product?.hsnCode || '-'}</td>
-                  <td style={tdCenterStyle}>-</td>
-                  <td style={tdCenterStyle}>-</td>
-                  <td style={tdCenterStyle}>{item?.quantity || 0}</td>
-                  <td style={tdRightStyle}>{formatCurrency(Number(product?.mrp || item?.unitPrice || 0))}</td>
-                  <td style={tdRightStyle}>{formatCurrency(Number(item?.unitPrice || 0))}</td>
-                  <td style={tdRightStyle}>{formatCurrency(sgst)}</td>
-                  <td style={tdRightStyle}>{formatCurrency(cgst)}</td>
-                  <td style={tdRightStyle}>{formatCurrency(total)}</td>
+                  <td style={{ ...tdBaseStyle, textAlign: 'center', whiteSpace: 'nowrap' }}>{product?.hsnCode || '-'}</td>
+                  <td style={{ ...tdBaseStyle, textAlign: 'center', whiteSpace: 'nowrap' }}>-</td>
+                  <td style={{ ...tdBaseStyle, textAlign: 'center', whiteSpace: 'nowrap' }}>-</td>
+                  <td style={{ ...tdBaseStyle, textAlign: 'center', whiteSpace: 'nowrap' }}>{item?.quantity || 0}</td>
+                  <td style={{ ...tdBaseStyle, textAlign: 'right', whiteSpace: 'nowrap' }}>{formatCurrency(Number(product?.mrp || item?.unitPrice || 0))}</td>
+                  <td style={{ ...tdBaseStyle, textAlign: 'right', whiteSpace: 'nowrap' }}>{formatCurrency(Number(item?.unitPrice || 0))}</td>
+                  <td style={{ ...tdBaseStyle, textAlign: 'right', whiteSpace: 'nowrap' }}>{formatCurrency(sgst)}</td>
+                  <td style={{ ...tdBaseStyle, textAlign: 'right', whiteSpace: 'nowrap' }}>{formatCurrency(cgst)}</td>
+                  <td style={{ ...tdBaseStyle, textAlign: 'right', whiteSpace: 'nowrap' }}>{formatCurrency(total)}</td>
                 </tr>
               )
             })}
             <tr style={{ fontWeight: 'bold', backgroundColor: '#f5f5f5' }}>
-              <td colSpan={6} style={{ ...tdRightStyle, textAlign: 'right', padding: '2mm' }}>TOTAL</td>
-              <td style={tdRightStyle}>{totalQty}</td>
-              <td style={tdRightStyle}></td>
-              <td style={tdRightStyle}></td>
-              <td style={tdRightStyle}>{formatCurrency(sgstAmount)}</td>
-              <td style={tdRightStyle}>{formatCurrency(cgstAmount)}</td>
-              <td style={tdRightStyle}>{formatCurrency(totalAmount)}</td>
+              <td colSpan={6} style={{ ...tdBaseStyle, textAlign: 'right', whiteSpace: 'nowrap' }}>TOTAL</td>
+              <td style={{ ...tdBaseStyle, textAlign: 'right', whiteSpace: 'nowrap' }}>{totalQty}</td>
+              <td style={tdBaseStyle}></td>
+              <td style={tdBaseStyle}></td>
+              <td style={{ ...tdBaseStyle, textAlign: 'right', whiteSpace: 'nowrap' }}>{formatCurrency(sgstAmount)}</td>
+              <td style={{ ...tdBaseStyle, textAlign: 'right', whiteSpace: 'nowrap' }}>{formatCurrency(cgstAmount)}</td>
+              <td style={{ ...tdBaseStyle, textAlign: 'right', whiteSpace: 'nowrap' }}>{formatCurrency(totalAmount)}</td>
             </tr>
           </tbody>
         </table>
@@ -375,7 +421,7 @@ export function InvoiceDocument({ invoice, business }: { invoice: Invoice; busin
           textAlign: 'center',
           fontSize: '8pt',
           color: '#666',
-          marginTop: '6mm',
+          marginTop: '4mm',
           paddingTop: '2mm',
           borderTop: '1px solid #e5e5e5',
         }}
@@ -385,51 +431,6 @@ export function InvoiceDocument({ invoice, business }: { invoice: Invoice; busin
           Generated on {formatDate(new Date().toISOString())} | This is a computer-generated invoice and does not require a physical signature.
         </p>
       </div>
-    </div>
+    </Wrapper>
   )
-}
-
-const thStyle: React.CSSProperties = {
-  border: '1px solid #000',
-  padding: '2mm',
-  fontWeight: 'bold',
-  textAlign: 'center',
-  verticalAlign: 'middle',
-  wordBreak: 'break-word',
-  overflowWrap: 'break-word',
-  whiteSpace: 'normal',
-  lineHeight: 1.3,
-}
-
-const tdLeftStyle: React.CSSProperties = {
-  border: '1px solid #000',
-  padding: '2mm',
-  textAlign: 'left',
-  verticalAlign: 'top',
-  wordBreak: 'break-word',
-  overflowWrap: 'break-word',
-  whiteSpace: 'normal',
-  lineHeight: 1.3,
-}
-
-const tdCenterStyle: React.CSSProperties = {
-  border: '1px solid #000',
-  padding: '2mm',
-  textAlign: 'center',
-  verticalAlign: 'top',
-  wordBreak: 'break-word',
-  overflowWrap: 'break-word',
-  whiteSpace: 'normal',
-  lineHeight: 1.3,
-}
-
-const tdRightStyle: React.CSSProperties = {
-  border: '1px solid #000',
-  padding: '2mm',
-  textAlign: 'right',
-  verticalAlign: 'top',
-  wordBreak: 'break-word',
-  overflowWrap: 'break-word',
-  whiteSpace: 'normal',
-  lineHeight: 1.3,
 }

@@ -310,17 +310,17 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
   y = addPageIfNeeded(doc, y, MM(60))
 
   const colDefs = [
-    { key: 'sl', label: 'S.NO.', width: MM(8) },
-    { key: 'item', label: 'ITEMS', width: MM(48) },
+    { key: 'sl', label: 'S.No.', width: MM(8) },
+    { key: 'item', label: 'ITEMS', width: MM(42) },
     { key: 'hsn', label: 'HSN', width: MM(13) },
-    { key: 'batch', label: 'BATCH NO.', width: MM(16) },
-    { key: 'expiry', label: 'EXP. DATE', width: MM(14) },
-    { key: 'qty', label: 'QTY.', width: MM(10) },
-    { key: 'mrp', label: 'MRP', width: MM(13) },
-    { key: 'rate', label: 'RATE', width: MM(16) },
-    { key: 'sgst', label: 'SGST', width: MM(13) },
-    { key: 'cgst', label: 'CGST', width: MM(13) },
-    { key: 'amount', label: 'AMOUNT', width: MM(16) },
+    { key: 'batch', label: 'BATCH', width: MM(16) },
+    { key: 'expiry', label: 'EXP.', width: MM(16) },
+    { key: 'qty', label: 'QTY', width: MM(10) },
+    { key: 'mrp', label: 'MRP', width: MM(14) },
+    { key: 'rate', label: 'RATE', width: MM(14) },
+    { key: 'sgst', label: 'SGST', width: MM(14) },
+    { key: 'cgst', label: 'CGST', width: MM(14) },
+    { key: 'amount', label: 'AMOUNT', width: MM(20) },
   ]
   const tableX = PAGE_MARGIN
   const headerRowHeight = MM(10)
@@ -334,8 +334,8 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
     drawCell(doc, currentX, y, col.width, headerRowHeight, col.label, {
       fontSize: 8,
       font: 'bold',
-      color: COLORS.white,
-      bgColor: COLORS.text,
+      color: COLORS.text,
+      bgColor: COLORS.white,
       borderColor: COLORS.border,
       align: 'center',
     })
@@ -353,8 +353,8 @@ export async function generateInvoicePDF(invoice, business, format = 'a4') {
         drawCell(doc, currentX, y, col.width, headerRowHeight, col.label, {
           fontSize: 8,
           font: 'bold',
-          color: COLORS.white,
-          bgColor: COLORS.text,
+          color: COLORS.text,
+          bgColor: COLORS.white,
           borderColor: COLORS.border,
           align: 'center',
         })
