@@ -1,0 +1,92 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e4]:
+        - link "MyBill" [ref=e6] [cursor=pointer]:
+          - /url: /dashboard
+        - navigation [ref=e14]:
+          - link "Dashboard" [ref=e15] [cursor=pointer]:
+            - /url: /dashboard
+          - link "Products" [ref=e23] [cursor=pointer]:
+            - /url: /products
+          - link "POS" [ref=e30] [cursor=pointer]:
+            - /url: /pos
+          - link "Orders" [ref=e37] [cursor=pointer]:
+            - /url: /orders
+          - link "Purchases" [ref=e43] [cursor=pointer]:
+            - /url: /purchases
+          - link "Customers" [ref=e49] [cursor=pointer]:
+            - /url: /customers
+          - link "Suppliers" [ref=e57] [cursor=pointer]:
+            - /url: /suppliers
+          - link "Inventory" [ref=e65] [cursor=pointer]:
+            - /url: /inventory
+          - link "Invoices" [ref=e71] [cursor=pointer]:
+            - /url: /invoices
+          - link "Payments" [ref=e77] [cursor=pointer]:
+            - /url: /payments
+          - link "Expenses" [ref=e82] [cursor=pointer]:
+            - /url: /expenses
+          - link "Reports" [ref=e88] [cursor=pointer]:
+            - /url: /reports
+          - link "Notifications" [ref=e93] [cursor=pointer]:
+            - /url: /notifications
+          - generic [ref=e99]:
+            - link "Settings" [ref=e100] [cursor=pointer]:
+              - /url: /settings
+            - link "Users" [ref=e106] [cursor=pointer]:
+              - /url: /users
+        - button "Logout" [ref=e123] [cursor=pointer]
+    - generic [ref=e127]:
+      - banner [ref=e128]:
+        - textbox "Search anything..." [ref=e134]
+        - generic [ref=e135]:
+          - button "Toggle theme" [ref=e136] [cursor=pointer]
+          - link [ref=e144] [cursor=pointer]:
+            - /url: /notifications
+            - button [ref=e145]
+          - generic [ref=e149]:
+            - generic [ref=e150]: T
+            - generic [ref=e151]:
+              - paragraph [ref=e152]: Test User
+              - paragraph [ref=e153]: STAFF
+      - main [ref=e154]:
+        - generic [ref=e232]:
+          - generic [ref=e233]:
+            - generic [ref=e234]:
+              - heading "Customers" [level=1] [ref=e235]
+              - paragraph [ref=e236]: Manage your customers
+            - link [ref=e237] [cursor=pointer]:
+              - /url: /customers/new
+              - button "Add Customer" [ref=e238]
+          - generic [ref=e240]:
+            - textbox "Search customers..." [ref=e247]
+            - table [ref=e250]:
+              - rowgroup [ref=e251]:
+                - row [ref=e252]:
+                  - columnheader "Name" [ref=e253]
+                  - columnheader "Phone" [ref=e254]
+                  - columnheader "Email" [ref=e255]
+                  - columnheader "Balance" [ref=e256]
+                  - columnheader "Total Purchases" [ref=e257]
+                  - columnheader "Status" [ref=e258]
+              - rowgroup [ref=e259]:
+                - row [ref=e260]:
+                  - cell [ref=e261]:
+                    - link "Jane Smith" [ref=e262] [cursor=pointer]:
+                      - /url: /customers/cmsx6pllo0001rmowynconxv0
+                  - cell "9123456789" [ref=e263]
+                  - cell "jane@example.com" [ref=e267]
+                  - cell "₹0.00" [ref=e272]
+                  - cell "₹0.00" [ref=e273]
+                  - cell "Active" [ref=e274]
+                - row [ref=e276]:
+                  - cell [ref=e277]:
+                    - link "John Doe" [ref=e278] [cursor=pointer]:
+                      - /url: /customers/cmsx6nlas0001f9ds760r90w9
+                  - cell "9876543210" [ref=e279]
+                  - cell "john@example.com" [ref=e283]
+                  - cell "₹0.00" [ref=e288]
+                  - cell "₹0.00" [ref=e289]
+                  - cell "Active" [ref=e290]
+  - alert [ref=e173]

@@ -1,0 +1,130 @@
+import prisma from '../config/db.js';
+import { generateNumber } from '../utils/generateNumber.js';
+import { buildSearchFilter, dateRangeFilter } from '../utils/helpers.js';
+import { generateInvoicePDF } from '../utils/pdfGenerator.js';
+
+export async function createInvoice(data, businessId) {
+  try {
+    const invoiceNumber = await generateNumber('invoice', businessId, 'INV');
+    const invoice = await prisma.invoice.create({
+      data: {
+        ...data,
+        businessId,
+        invoiceNumber,
+        items: { create: data.items }
+      },
+      include: { items: { include: { product: true } }, customer: true }
+    });
+    return invoice;
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function listInvoices(businessId, { page = 1, limit = 10, status, customerId, startDate, endDate, search }) {
+  try {
+    const where = { businessId, ...buildSearchFilter(['invoiceNumber', 'notes'], search) };
+    if (status) where.paymentStatus = status;
+    if (customerId) where.customerId = customerId;
+    Object.assign(where, dateRangeFilter('invoiceDate', startDate, endDate));
+
+    const [invoices, total] = await Promise.all([
+      prisma.invoice.findMany({
+        where,
+        include: { customer: true, items: { include: { product: true } } },
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: { createdAt: 'desc' }
+      }),
+      prisma.invoice.count({ where })
+    ]);
+    return { invoices, total, page, limit, totalPages: Math.ceil(total / limit) };
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getInvoice(id, businessId) {
+  try {
+    return await prisma.invoice.findFirst({
+      where: { id, businessId },
+      include: {
+        items: { include: { product: true } },
+        customer: true,
+        business: true,
+        payments: true,
+        order: true
+      }
+    });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function updateInvoice(id, businessId, data) {
+  try {
+    if (data.items) {
+      await prisma.invoiceItem.deleteMany({ where: { invoiceId: id } });
+      data.items = data.items.map(i => ({ ...i, invoiceId: id }));
+    }
+    return await prisma.invoice.update({
+      where: { id },
+      data,
+      include: { items: true, customer: true }
+    });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function deleteInvoice(id, businessId) {
+  try {
+    return await prisma.invoice.delete({
+      where: { id }
+    });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function updateStatus(id, businessId, status) {
+  try {
+    return await prisma.invoice.update({
+      where: { id },
+      data: { paymentStatus: status }
+    });
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function generatePDF(id, businessId, type = 'a4') {
+  try {
+    const invoice = await getInvoice(id, businessId);
+    if (!invoice) throw new Error('Invoice not found');
+    return generateInvoicePDF(invoice, invoice.business, type);
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function getPrintData(id, businessId) {
+  try {
+    return await getInvoice(id, businessId);
+  } catch (err) {
+    throw err;
+  }
+}
+
+export async function shareViaEmail(id, businessId, email) {
+  try {
+    const invoice = await getInvoice(id, businessId);
+    if (!invoice) throw new Error('Invoice not found');
+    const { pdfBuffer } = await generateInvoicePDF(invoice, invoice.business, 'a4');
+    const { sendInvoiceEmail } = await import('../utils/email.js');
+    await sendInvoiceEmail(email, invoice.customer.name, pdfBuffer, invoice.invoiceNumber);
+    return { message: 'Invoice shared' };
+  } catch (err) {
+    throw err;
+  }
+}

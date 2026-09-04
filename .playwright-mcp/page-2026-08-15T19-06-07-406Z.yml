@@ -1,0 +1,26 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e5]:
+    - generic [ref=f1e6]:
+      - link [ref=f1e7] [cursor=pointer]:
+        - /url: /
+      - heading "Welcome back" [level=1] [ref=f1e13]
+      - paragraph [ref=f1e14]: Sign in to your MyBill account
+    - generic [ref=f1e15]:
+      - generic [ref=f1e16]:
+        - generic [ref=f1e17]: Email
+        - textbox "Email" [ref=f1e18]:
+          - /placeholder: name@company.com
+      - generic [ref=f1e19]:
+        - generic [ref=f1e20]:
+          - generic [ref=f1e21]: Password
+          - link "Forgot password?" [ref=f1e22] [cursor=pointer]:
+            - /url: /forgot-password
+        - generic [ref=f1e23]:
+          - textbox "Password" [ref=f1e24]
+          - button [ref=f1e25] [cursor=pointer]
+      - button "Sign In" [ref=f1e29] [cursor=pointer]
+    - paragraph [ref=f1e31]:
+      - text: Don't have an account?
+      - link "Sign up" [ref=f1e32] [cursor=pointer]:
+        - /url: /signup
+  - alert [ref=f1e33]
